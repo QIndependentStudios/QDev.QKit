@@ -49,7 +49,7 @@ namespace QKit.Controls
                 {
                     var control = sender as MasterDetailsView;
 
-                    if (control == null)
+                    if (control == null || control.AdaptiveVisualStateGroupElement == null)
                         return;
 
                     control.IsDetailsViewPreferred = args.NewValue != null;
@@ -72,13 +72,22 @@ namespace QKit.Controls
             nameof(IsDetailsViewPreferred),
             typeof(bool),
             typeof(MasterDetailsView),
-            new PropertyMetadata(default(bool)));
+            new PropertyMetadata(default(bool),
+                (sender, args) =>
+                {
+                    var control = sender as MasterDetailsView;
 
-        public static readonly DependencyProperty IsNormalStateProperty = DependencyProperty.Register(
-            nameof(IsNormalState),
+                    if (control == null)
+                        return;
+
+                    control.UpdateCanExitDetailsView();
+                }));
+
+        public static readonly DependencyProperty CanExitDetailsViewProperty = DependencyProperty.Register(
+            nameof(CanExitDetailsView),
             typeof(bool),
             typeof(MasterDetailsView),
-            new PropertyMetadata(true));
+            new PropertyMetadata(default(bool)));
         #endregion
 
         #region Visual States
@@ -122,10 +131,10 @@ namespace QKit.Controls
 
         }
 
-        public bool IsNormalState
+        public bool CanExitDetailsView
         {
-            get { return (bool)GetValue(IsNormalStateProperty); }
-            private set { SetValue(IsNormalStateProperty, value); }
+            get { return (bool)GetValue(CanExitDetailsViewProperty); }
+            private set { SetValue(CanExitDetailsViewProperty, value); }
 
         }
         #endregion
@@ -152,18 +161,13 @@ namespace QKit.Controls
             DetailDrillOut = GetTemplateChild(DetailsDrillOutAnimationName) as Storyboard;
         }
 
-        public bool TryExitDetailsView()
+        private void UpdateCanExitDetailsView()
         {
-            if (IsDetailsViewPreferred &&
-                AdaptiveVisualStateGroupElement.CurrentState == NarrowVisualStateElement)
-            {
-                IsDetailsViewPreferred = false;
-                DetailDrillOut?.Begin();
-                Details = null;
-                return true;
-            }
+            if (AdaptiveVisualStateGroupElement == null)
+                return;
 
-            return false;
+            CanExitDetailsView = IsDetailsViewPreferred && 
+                AdaptiveVisualStateGroupElement.CurrentState == NarrowVisualStateElement;
         }
 
         private void OnViewStateChanged()
@@ -174,12 +178,21 @@ namespace QKit.Controls
             var args = new RoutedEventArgs();
             ViewStateChanged(this, args);
         }
+
+        public void ExitDetailsView()
+        {
+            if (CanExitDetailsView)
+            {
+                IsDetailsViewPreferred = false;
+                DetailDrillOut?.Begin();
+                Details = null;
+            }
+        }
         #endregion
 
         #region Event Handlers
         private void AdaptiveVisualStateGroupElement_CurrentStateChanged(object sender, VisualStateChangedEventArgs e)
         {
-            IsNormalState = e.NewState == NormalVisualStateElement;
 
             if (e.OldState == NormalVisualStateElement && e.NewState != NormalVisualStateElement)
             {
@@ -199,6 +212,8 @@ namespace QKit.Controls
                 DetailDrillIn?.Stop();
                 DetailDrillOut?.Stop();
             }
+
+            UpdateCanExitDetailsView();
             OnViewStateChanged();
         }
         #endregion
