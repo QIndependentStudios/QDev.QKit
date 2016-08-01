@@ -11,6 +11,7 @@ namespace QKit.Grouping
     public static class GroupedListHelper
     {
         private const string OtherKey = "...";
+
         /// <summary>
         /// Groups and sorts into a list of group lists based on a selector.
         /// </summary>
