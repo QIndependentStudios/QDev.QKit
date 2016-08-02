@@ -55,31 +55,28 @@
                             </Storyboard>
                         </Border.Resources>
                         <Grid>
-                            <Grid.RowDefinitions>
-                                <RowDefinition x:Name="ContentRow"
-                                               Height="*" />
-                            </Grid.RowDefinitions>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition x:Name="MasterPane"
                                                   Width="{Binding MasterPaneWidth, RelativeSource={RelativeSource TemplatedParent}}" />
                                 <ColumnDefinition x:Name="DetailsPane"
                                                   Width="*" />
                             </Grid.ColumnDefinitions>
-                            <ContentPresenter x:Name="DetailsPresenter"
-                                              HorizontalAlignment="Stretch"
-                                              VerticalAlignment="Stretch"
-                                              HorizontalContentAlignment="Stretch"
-                                              VerticalContentAlignment="Stretch"
-                                              Content="{TemplateBinding Details}"
-                                              ContentTemplate="{TemplateBinding DetailsTemplate}"
-                                              IsHitTestVisible="{Binding CanExitDetailsView, RelativeSource={RelativeSource TemplatedParent}}"
-                                              Grid.Column="1">
-                                <ContentPresenter.ContentTransitions>
+                            <!-- Should be a ContentPresenter but crashes without a template for some reason. -->
+                            <ContentControl x:Name="DetailsPresenter"
+                                            HorizontalAlignment="Stretch"
+                                            VerticalAlignment="Stretch"
+                                            HorizontalContentAlignment="Stretch"
+                                            VerticalContentAlignment="Stretch"
+                                            Content="{TemplateBinding Details}"
+                                            ContentTemplate="{TemplateBinding DetailsTemplate}"
+                                            IsHitTestVisible="{Binding CanExitDetailsView, RelativeSource={RelativeSource TemplatedParent}}"
+                                            Grid.Column="1">
+                                <ContentControl.ContentTransitions>
                                     <TransitionCollection>
                                         <ContentThemeTransition />
                                     </TransitionCollection>
-                                </ContentPresenter.ContentTransitions>
-                            </ContentPresenter>
+                                </ContentControl.ContentTransitions>
+                            </ContentControl>
                             <ContentPresenter x:Name="MasterPresenter"
                                               Content="{TemplateBinding Content}"
                                               ContentTemplate="{TemplateBinding ContentTemplate}"

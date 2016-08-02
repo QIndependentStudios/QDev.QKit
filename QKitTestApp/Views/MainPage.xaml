@@ -1,0 +1,69 @@
+<Page x:Class="QKitTestApp.Views.MainPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:Core="using:Microsoft.Xaml.Interactions.Core"
+      xmlns:Interactivity="using:Microsoft.Xaml.Interactivity"
+      xmlns:controls="using:Template10.Controls"
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+      xmlns:local="using:QKitTestApp.Views"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+      xmlns:vm="using:QKitTestApp.ViewModels"
+      xmlns:qkit="using:QKit.Controls"
+      xmlns:interactivity="using:Microsoft.Xaml.Interactivity"
+      xmlns:core="using:Microsoft.Xaml.Interactions.Core"
+      xmlns:behaviors="using:Template10.Behaviors"
+      mc:Ignorable="d">
+
+    <Page.DataContext>
+        <vm:MainPageViewModel x:Name="ViewModel" />
+    </Page.DataContext>
+
+    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <controls:PageHeader x:Name="pageHeader"
+                             Content="Main Page"
+                             RelativePanel.AlignLeftWithPanel="True"
+                             RelativePanel.AlignRightWithPanel="True"
+                             RelativePanel.AlignTopWithPanel="True">
+            <AppBarButton Icon="Back"
+                          IsEnabled="{x:Bind MasterDetails.CanExitDetailsView, Mode=OneWay}">
+                <interactivity:Interaction.Behaviors>
+                    <core:EventTriggerBehavior EventName="Click">
+                        <core:ChangePropertyAction TargetObject="{x:Bind MasterDetails}"
+                                                   PropertyName="IsDetailsViewState"
+                                                   Value="False" />
+                    </core:EventTriggerBehavior>
+                </interactivity:Interaction.Behaviors>
+            </AppBarButton>
+        </controls:PageHeader>
+
+        <qkit:MasterDetailsView x:Name="MasterDetails"
+                                Grid.Row="1">
+            <qkit:MasterDetailsView.DetailsTemplate>
+                <DataTemplate>
+                    <TextBlock Text="test" />
+                </DataTemplate>
+            </qkit:MasterDetailsView.DetailsTemplate>
+            <ListView x:Name="MasterList"
+                      IsItemClickEnabled="True">
+                <interactivity:Interaction.Behaviors>
+                    <core:EventTriggerBehavior EventName="ItemClick">
+                        <core:ChangePropertyAction TargetObject="{x:Bind MasterDetails}"
+                                                   PropertyName="IsDetailsViewState"
+                                                   Value="True" />
+                    </core:EventTriggerBehavior>
+                </interactivity:Interaction.Behaviors>
+
+                <x:String>blah</x:String>
+                <x:String>blah</x:String>
+                <x:String>blah</x:String>
+            </ListView>
+        </qkit:MasterDetailsView>
+
+    </Grid>
+
+</Page>
+
