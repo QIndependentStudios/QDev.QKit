@@ -22,8 +22,8 @@ namespace QKit.Controls
         #endregion
 
         #region DependencyProperties
-        public static readonly DependencyProperty VisualStateNormalMinWidthProperty = DependencyProperty.Register(
-            nameof(VisualStateNormalMinWidth),
+        public static readonly DependencyProperty NormalStateMinWidthProperty = DependencyProperty.Register(
+            nameof(NormalStateMinWidth),
             typeof(double),
             typeof(MasterDetailsView),
             new PropertyMetadata(default(double)));
@@ -85,10 +85,10 @@ namespace QKit.Controls
         #endregion
 
         #region Properties
-        public double VisualStateNormalMinWidth
+        public double NormalStateMinWidth
         {
-            get { return (double)GetValue(VisualStateNormalMinWidthProperty); }
-            set { SetValue(VisualStateNormalMinWidthProperty, value); }
+            get { return (double)GetValue(NormalStateMinWidthProperty); }
+            set { SetValue(NormalStateMinWidthProperty, value); }
         }
 
         public double MasterPaneWidth
