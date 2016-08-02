@@ -1,6 +1,20 @@
-<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:t10Converters="using:Template10.Converters"
+                    xmlns:xamlControls="using:Windows.UI.Xaml.Controls">
 
     <!--  custom styles here  -->
+    <t10Converters:ValueWhenConverter x:Key="MasterDetailsSelectionModeConverter">
+        <t10Converters:ValueWhenConverter.When>
+            <x:Boolean>True</x:Boolean>
+        </t10Converters:ValueWhenConverter.When>
+        <t10Converters:ValueWhenConverter.Value>
+            <xamlControls:ListViewSelectionMode>None</xamlControls:ListViewSelectionMode>
+        </t10Converters:ValueWhenConverter.Value>
+        <t10Converters:ValueWhenConverter.Otherwise>
+            <xamlControls:ListViewSelectionMode>Single</xamlControls:ListViewSelectionMode>
+        </t10Converters:ValueWhenConverter.Otherwise>
+    </t10Converters:ValueWhenConverter>
 
 </ResourceDictionary>
 

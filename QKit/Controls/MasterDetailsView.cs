@@ -46,8 +46,14 @@ namespace QKit.Controls
             typeof(MasterDetailsView),
             new PropertyMetadata(default(object)));
 
-        public static readonly DependencyProperty IsDetailsViewStateProperty = DependencyProperty.Register(
-            nameof(IsDetailsViewState),
+        public static readonly DependencyProperty IsStackedModeProperty = DependencyProperty.Register(
+            nameof(IsStackedMode),
+            typeof(bool),
+            typeof(MasterDetailsView),
+            new PropertyMetadata(default(bool)));
+
+        public static readonly DependencyProperty IsDetailsViewInStackedModeProperty = DependencyProperty.Register(
+            nameof(IsDetailsViewInStackedMode),
             typeof(bool),
             typeof(MasterDetailsView),
             new PropertyMetadata(default(bool),
@@ -109,10 +115,17 @@ namespace QKit.Controls
             set { SetValue(DetailsProperty, value); }
         }
 
-        public bool IsDetailsViewState
+        public bool IsStackedMode
         {
-            get { return (bool)GetValue(IsDetailsViewStateProperty); }
-            set { SetValue(IsDetailsViewStateProperty, value); }
+            get { return (bool)GetValue(IsStackedModeProperty); }
+            private set { SetValue(IsStackedModeProperty, value); }
+
+        }
+
+        public bool IsDetailsViewInStackedMode
+        {
+            get { return (bool)GetValue(IsDetailsViewInStackedModeProperty); }
+            set { SetValue(IsDetailsViewInStackedModeProperty, value); }
         }
 
         public bool CanExitDetailsView
@@ -151,7 +164,7 @@ namespace QKit.Controls
             if (previousState == NormalVisualStateElement &&
                 AdaptiveVisualStateGroupElement.CurrentState == NarrowVisualStateElement)
             {
-                if (IsDetailsViewState)
+                if (IsDetailsViewInStackedMode)
                 {
                     // normal -> master
                     DetailDrillIn.Begin();
@@ -177,7 +190,7 @@ namespace QKit.Controls
             else if (previousState == NarrowVisualStateElement &&
                 AdaptiveVisualStateGroupElement.CurrentState == NarrowVisualStateElement)
             {
-                if (IsDetailsViewState)
+                if (IsDetailsViewInStackedMode)
                     // master -> details
                     DetailDrillIn.Begin();
                 else
@@ -187,16 +200,17 @@ namespace QKit.Controls
                 OnViewStateChanged();
             }
 
-            CanExitDetailsView = IsDetailsViewState &&
-                AdaptiveVisualStateGroupElement.CurrentState == NarrowVisualStateElement;
+            UpdateReadonlyStateProperties();
         }
 
-        private void UpdateCanExitDetailsView()
+        private void UpdateReadonlyStateProperties()
         {
             if (AdaptiveVisualStateGroupElement == null)
                 return;
 
-            CanExitDetailsView = IsDetailsViewState &&
+            IsStackedMode = AdaptiveVisualStateGroupElement.CurrentState == NarrowVisualStateElement;
+
+            CanExitDetailsView = IsDetailsViewInStackedMode &&
                 AdaptiveVisualStateGroupElement.CurrentState == NarrowVisualStateElement;
         }
 

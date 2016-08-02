@@ -33,7 +33,7 @@
                 <interactivity:Interaction.Behaviors>
                     <core:EventTriggerBehavior EventName="Click">
                         <core:ChangePropertyAction TargetObject="{x:Bind MasterDetails}"
-                                                   PropertyName="IsDetailsViewState"
+                                                   PropertyName="IsDetailsViewInStackedMode"
                                                    Value="False" />
                     </core:EventTriggerBehavior>
                 </interactivity:Interaction.Behaviors>
@@ -48,11 +48,12 @@
                 </DataTemplate>
             </qkit:MasterDetailsView.DetailsTemplate>
             <ListView x:Name="MasterList"
-                      IsItemClickEnabled="True">
+                      IsItemClickEnabled="True"
+                      SelectionMode="{x:Bind MasterDetails.IsStackedMode, Mode=OneWay, Converter={StaticResource MasterDetailsSelectionModeConverter}}">
                 <interactivity:Interaction.Behaviors>
                     <core:EventTriggerBehavior EventName="ItemClick">
                         <core:ChangePropertyAction TargetObject="{x:Bind MasterDetails}"
-                                                   PropertyName="IsDetailsViewState"
+                                                   PropertyName="IsDetailsViewInStackedMode"
                                                    Value="True" />
                     </core:EventTriggerBehavior>
                 </interactivity:Interaction.Behaviors>
