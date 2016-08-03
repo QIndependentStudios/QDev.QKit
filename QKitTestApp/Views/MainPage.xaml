@@ -44,7 +44,7 @@
                                 Grid.Row="1">
             <qkit:MasterDetailsView.DetailsTemplate>
                 <DataTemplate>
-                    <TextBlock Text="test" />
+                    <Button Content="test" />
                 </DataTemplate>
             </qkit:MasterDetailsView.DetailsTemplate>
             <ListView x:Name="MasterList"

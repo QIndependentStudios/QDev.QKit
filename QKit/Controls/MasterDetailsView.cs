@@ -5,6 +5,8 @@ using Windows.UI.Xaml.Media.Animation;
 
 namespace QKit.Controls
 {
+    [TemplatePart(Name = MasterPresenterName, Type = typeof(ContentPresenter))]
+    [TemplatePart(Name = DetailsPresenterName, Type = typeof(ContentControl))]
     [TemplateVisualState(Name = NormalVisualStateName, GroupName = AdaptiveVisualStateGroupName)]
     [TemplateVisualState(Name = NarrowVisualStateName, GroupName = AdaptiveVisualStateGroupName)]
     [ContentProperty(Name = nameof(Content))]
@@ -14,6 +16,8 @@ namespace QKit.Controls
         public event ViewStateChangedEventHandler ViewStateChanged;
 
         #region Constants
+        public const string MasterPresenterName = "MasterPresenter";
+        public const string DetailsPresenterName = "DetailsPresenter";
         public const string AdaptiveVisualStateGroupName = "AdaptiveVisualStateGroup";
         public const string NormalVisualStateName = "VisualStateNormal";
         public const string NarrowVisualStateName = "VisualStateNarrow";
@@ -77,7 +81,10 @@ namespace QKit.Controls
             new PropertyMetadata(default(bool)));
         #endregion
 
-        #region Visual States
+        #region Template Parts
+        private ContentPresenter MasterPresenter { get; set; }
+        private ContentControl DetailsPresenter { get; set; }
+
         private VisualStateGroup AdaptiveVisualStateGroupElement { get; set; }
         private VisualState NormalVisualStateElement { get; set; }
         private VisualState NarrowVisualStateElement { get; set; }
@@ -146,6 +153,10 @@ namespace QKit.Controls
         #region Methods
         protected override void OnApplyTemplate()
         {
+            // Controls
+            MasterPresenter = GetTemplateChild(MasterPresenterName) as ContentPresenter;
+            DetailsPresenter = GetTemplateChild(DetailsPresenterName) as ContentControl;
+
             // Visual States
             AdaptiveVisualStateGroupElement = GetTemplateChild(AdaptiveVisualStateGroupName) as VisualStateGroup;
             NormalVisualStateElement = GetTemplateChild(NormalVisualStateName) as VisualState;
@@ -154,6 +165,7 @@ namespace QKit.Controls
             if (AdaptiveVisualStateGroupElement != null)
                 AdaptiveVisualStateGroupElement.CurrentStateChanged += AdaptiveVisualStateGroupElement_CurrentStateChanged;
 
+            // Animations
             DetailDrillIn = GetTemplateChild(DetailsDrillInAnimationName) as Storyboard;
             DetailDrillOut = GetTemplateChild(DetailsDrillOutAnimationName) as Storyboard;
         }
@@ -169,12 +181,16 @@ namespace QKit.Controls
                     // normal -> master
                     DetailDrillIn.Begin();
                     DetailDrillIn.SkipToFill();
+                    SetHitTestVisibility(MasterPresenter, false);
+                    SetHitTestVisibility(DetailsPresenter, true);
                 }
                 else
                 {
                     // normal -> details
                     DetailDrillOut.Begin();
                     DetailDrillOut.SkipToFill();
+                    SetHitTestVisibility(MasterPresenter, true);
+                    SetHitTestVisibility(DetailsPresenter, false);
                 }
 
                 OnViewStateChanged();
@@ -191,11 +207,18 @@ namespace QKit.Controls
                 AdaptiveVisualStateGroupElement.CurrentState == NarrowVisualStateElement)
             {
                 if (IsDetailsViewInStackedMode)
-                    // master -> details
+                {// master -> details
                     DetailDrillIn.Begin();
+                    SetHitTestVisibility(MasterPresenter, false);
+                    SetHitTestVisibility(DetailsPresenter, true);
+                }
                 else
+                {
                     // details -> master
                     DetailDrillOut.Begin();
+                    SetHitTestVisibility(MasterPresenter, true);
+                    SetHitTestVisibility(DetailsPresenter, false);
+                }
 
                 OnViewStateChanged();
             }
@@ -227,6 +250,15 @@ namespace QKit.Controls
         {
             DetailDrillIn?.Stop();
             DetailDrillOut?.Stop();
+
+            SetHitTestVisibility(MasterPresenter, true);
+            SetHitTestVisibility(DetailsPresenter, true);
+        }
+
+        private void SetHitTestVisibility(FrameworkElement element, bool isHitTestVisible)
+        {
+            if (element != null)
+                element.IsHitTestVisible = isHitTestVisible;
         }
         #endregion
 
