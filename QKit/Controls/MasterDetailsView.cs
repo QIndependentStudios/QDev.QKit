@@ -193,6 +193,7 @@ namespace QKit.Controls
                     SetHitTestVisibility(DetailsPresenter, false);
                 }
 
+                UpdateReadonlyStateProperties();
                 OnViewStateChanged();
             }
             else if (previousState == NarrowVisualStateElement &&
@@ -201,6 +202,7 @@ namespace QKit.Controls
                 // master -> normal
                 // details -> normal
                 ResetViewForNormal();
+                UpdateReadonlyStateProperties();
                 OnViewStateChanged();
             }
             else if (previousState == NarrowVisualStateElement &&
@@ -220,6 +222,7 @@ namespace QKit.Controls
                     SetHitTestVisibility(DetailsPresenter, false);
                 }
 
+                UpdateReadonlyStateProperties();
                 OnViewStateChanged();
             }
 

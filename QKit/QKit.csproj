@@ -111,6 +111,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Controls\MasterDetailsView.cs" />
+    <Compile Include="Controls\NavigationMenuItem.cs" />
+    <Compile Include="Controls\NavigationMenuMainButton.cs" />
+    <Compile Include="Controls\NavigationMenuView.cs" />
     <Compile Include="Grouping\AlphaKeyGroup.cs" />
     <Compile Include="Grouping\GenericKeyGroup.cs" />
     <Compile Include="Grouping\GlyphKeyGroup.cs" />
@@ -130,6 +133,11 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Page>
     <Page Include="Themes\MasterDetailsView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Page>
+    <Page Include="Themes\NavigationMenuView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

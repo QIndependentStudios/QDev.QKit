@@ -1,0 +1,39 @@
+﻿<Page x:Class="QKitTestApp.Views.Shell"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:local="using:QKitTestApp.Views"
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+      xmlns:views="using:QKitTestApp.Views"
+      xmlns:qkit="using:QKit.Controls"
+      mc:Ignorable="d">
+    <Page.Resources>
+    </Page.Resources>
+
+    <qkit:NavigationMenuView x:Name="NavigationMenuRoot"
+                             SelectedMenuItemChanged="NavigationMenuRoot_SelectedMenuItemChanged">
+        <qkit:NavigationMenuView.PrimaryMenuItems>
+            <qkit:NavigationMenuItem Content="Home"
+                                     PageType="views:MainPage"
+                                     ClearHistory="True">
+                <qkit:NavigationMenuItem.Icon>
+                    <FontIcon Glyph="&#xE80F;"/>
+                </qkit:NavigationMenuItem.Icon>
+            </qkit:NavigationMenuItem>
+            <qkit:NavigationMenuItem Content="Personalization"
+                                     PageType="views:TestPage1"
+                                     PageParameters="1">
+                <qkit:NavigationMenuItem.Icon>
+                    <FontIcon Glyph="&#xE771;" />
+                </qkit:NavigationMenuItem.Icon>
+            </qkit:NavigationMenuItem>
+            <qkit:NavigationMenuItem Content="Accessories"
+                                     PageType="views:TestPage1"
+                                     PageParameters="2">
+                <qkit:NavigationMenuItem.Icon>
+                    <FontIcon Glyph="&#xE772;" />
+                </qkit:NavigationMenuItem.Icon>
+            </qkit:NavigationMenuItem>
+        </qkit:NavigationMenuView.PrimaryMenuItems>
+    </qkit:NavigationMenuView>
+</Page>

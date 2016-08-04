@@ -13,6 +13,10 @@
       xmlns:core="using:Microsoft.Xaml.Interactions.Core"
       xmlns:behaviors="using:Template10.Behaviors"
       mc:Ignorable="d">
+    <Page.Resources>
+
+        <x:Double x:Key="NavigationMenuGlyphFontSize">15</x:Double>
+    </Page.Resources>
 
     <Page.DataContext>
         <vm:MainPageViewModel x:Name="ViewModel" />
@@ -28,20 +32,18 @@
                              RelativePanel.AlignLeftWithPanel="True"
                              RelativePanel.AlignRightWithPanel="True"
                              RelativePanel.AlignTopWithPanel="True">
-            <AppBarButton Icon="Back"
-                          IsEnabled="{x:Bind MasterDetails.CanExitDetailsView, Mode=OneWay}">
-                <interactivity:Interaction.Behaviors>
-                    <core:EventTriggerBehavior EventName="Click">
-                        <core:ChangePropertyAction TargetObject="{x:Bind MasterDetails}"
-                                                   PropertyName="IsDetailsViewInStackedMode"
-                                                   Value="False" />
-                    </core:EventTriggerBehavior>
-                </interactivity:Interaction.Behaviors>
-            </AppBarButton>
         </controls:PageHeader>
 
         <qkit:MasterDetailsView x:Name="MasterDetails"
-                                Grid.Row="1">
+                                Grid.Row="1"
+                                ViewStateChanged="{x:Bind ViewModel.MasterDetails_ViewStateChanged}">
+            <interactivity:Interaction.Behaviors>
+                <behaviors:BackButtonBehavior Handled="{x:Bind MasterDetails.CanExitDetailsView, Mode=OneWay}">
+                    <core:ChangePropertyAction TargetObject="{x:Bind MasterDetails}"
+                                               PropertyName="IsDetailsViewInStackedMode"
+                                               Value="False" />
+                </behaviors:BackButtonBehavior>
+            </interactivity:Interaction.Behaviors>
             <qkit:MasterDetailsView.DetailsTemplate>
                 <DataTemplate>
                     <Button Content="test" />
@@ -63,8 +65,6 @@
                 <x:String>blah</x:String>
             </ListView>
         </qkit:MasterDetailsView>
-
     </Grid>
-
 </Page>
 
