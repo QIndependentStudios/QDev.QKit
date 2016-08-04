@@ -327,34 +327,26 @@
                 <ControlTemplate TargetType="controls:NavigationMenuView">
                     <Grid>
                         <VisualStateManager.VisualStateGroups>
-                            <VisualStateGroup x:Name="AdaptiveStateGroup">
-                                <VisualState>
+                            <VisualStateGroup x:Name="AdaptiveVisualStateGroup">
+                                <VisualState x:Name="WideVisualState">
                                     <VisualState.StateTriggers>
                                         <AdaptiveTrigger MinWindowWidth="{ThemeResource WideMinWidth}" />
                                     </VisualState.StateTriggers>
                                     <VisualState.Setters>
-                                        <Setter Target="RootSplitView.DisplayMode"
-                                                Value="CompactInline" />
-                                        <Setter Target="RootSplitView.IsPaneOpen"
-                                                Value="True" />
                                     </VisualState.Setters>
                                 </VisualState>
-                                <VisualState>
+                                <VisualState x:Name="NormalVisualState">
                                     <VisualState.StateTriggers>
                                         <AdaptiveTrigger MinWindowWidth="{ThemeResource NormalMinWidth}" />
                                     </VisualState.StateTriggers>
                                     <VisualState.Setters>
-                                        <Setter Target="RootSplitView.DisplayMode"
-                                                Value="CompactOverlay" />
                                     </VisualState.Setters>
                                 </VisualState>
-                                <VisualState>
+                                <VisualState x:Name="NarrowVisualState">
                                     <VisualState.StateTriggers>
                                         <AdaptiveTrigger MinWindowWidth="{ThemeResource NarrowMinWidth}" />
                                     </VisualState.StateTriggers>
                                     <VisualState.Setters>
-                                        <Setter Target="RootSplitView.DisplayMode"
-                                                Value="Overlay" />
                                     </VisualState.Setters>
                                 </VisualState>
                             </VisualStateGroup>
@@ -362,19 +354,32 @@
                         <SplitView x:Name="RootSplitView"
                                    OpenPaneLength="{ThemeResource NavigationMenuPaneWidth}"
                                    CompactPaneLength="{ThemeResource NavigationMenuItemIconWidth}"
-                                   DisplayMode="CompactOverlay">
+                                   IsPaneOpen="{TemplateBinding IsMenuOpen}"
+                                   DisplayMode="CompactInline">
                             <SplitView.Pane>
                                 <Grid>
                                     <Grid.RowDefinitions>
                                         <RowDefinition Height="Auto" />
                                         <RowDefinition Height="*" />
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="Auto" />
                                     </Grid.RowDefinitions>
                                     <controls:NavigationMenuMainButton Content="{TemplateBinding MainMenuButtonContent}"
                                                                        Icon="{TemplateBinding MainMenuButtonIcon}"
-                                                                       IsChecked="{Binding IsPaneOpen, ElementName=RootSplitView, Mode=TwoWay}" />
+                                                                       IsChecked="{Binding IsMenuOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}" />
                                     <ScrollViewer Grid.Row="1"
                                                   VerticalScrollBarVisibility="Auto">
                                         <ItemsControl ItemsSource="{TemplateBinding PrimaryMenuItems}"
+                                                      HorizontalAlignment="Stretch"
+                                                      HorizontalContentAlignment="Stretch" />
+                                    </ScrollViewer>
+                                    <Rectangle Grid.Row="2"
+                                               Height="1"
+                                               Fill="{ThemeResource SystemControlForegroundBaseLowBrush}" />
+                                    <ScrollViewer Grid.Row="3"
+                                                  VerticalScrollBarVisibility="Auto"
+                                                  MaxHeight="168">
+                                        <ItemsControl ItemsSource="{TemplateBinding SecondaryMenuItems}"
                                                       HorizontalAlignment="Stretch"
                                                       HorizontalContentAlignment="Stretch" />
                                     </ScrollViewer>

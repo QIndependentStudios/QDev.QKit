@@ -19,8 +19,8 @@ namespace QKitTestApp.ViewModels
             if (masterDetails == null)
                 return;
 
-            App.Current.ForceShowShellBackButton = masterDetails.IsStackedMode && masterDetails.IsDetailsViewInStackedMode;
-            App.Current.UpdateShellBackButton();
+            App.Current.ForceShowShellBackButton = masterDetails.CanExitDetailsView;
+            Template10.Common.BootStrapper.Current.UpdateShellBackButton();
         }
     }
 }

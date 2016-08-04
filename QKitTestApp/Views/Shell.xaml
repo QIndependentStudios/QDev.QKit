@@ -35,5 +35,13 @@
                 </qkit:NavigationMenuItem.Icon>
             </qkit:NavigationMenuItem>
         </qkit:NavigationMenuView.PrimaryMenuItems>
+        <qkit:NavigationMenuView.SecondaryMenuItems>
+            <qkit:NavigationMenuItem Content="Settings"
+                                     PageType="views:Settings">
+                <qkit:NavigationMenuItem.Icon>
+                    <FontIcon Glyph="&#xE713;" />
+                </qkit:NavigationMenuItem.Icon>
+            </qkit:NavigationMenuItem>
+        </qkit:NavigationMenuView.SecondaryMenuItems>
     </qkit:NavigationMenuView>
 </Page>

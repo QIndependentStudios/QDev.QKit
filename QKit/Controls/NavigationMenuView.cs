@@ -6,37 +6,37 @@ using Windows.UI.Xaml.Controls;
 namespace QKit.Controls
 {
     [TemplatePart(Name = RootSplitViewName, Type = typeof(SplitView))]
+    [TemplateVisualState(Name = WideVisualStateName, GroupName = AdaptiveVisualStateGroupName)]
+    [TemplateVisualState(Name = NormalVisualStateName, GroupName = AdaptiveVisualStateGroupName)]
+    [TemplateVisualState(Name = NarrowVisualStateName, GroupName = AdaptiveVisualStateGroupName)]
     public sealed class NavigationMenuView : Control
     {
+        #region Events
         public delegate void SelectedMenuItemChangedEventHandler(object sender, RoutedEventArgs e);
         public event SelectedMenuItemChangedEventHandler SelectedMenuItemChanged;
+        #endregion
+
+        #region Constants
+        private const string RootSplitViewName = "RootSplitView";
+        private const string NavigationMenuItemsGroupName = "NavigationMenuView.NavigationMenuItems";
+        public const string AdaptiveVisualStateGroupName = "AdaptiveVisualStateGroup";
+        public const string WideVisualStateName = "WideVisualState";
+        public const string NormalVisualStateName = "NormalVisualState";
+        public const string NarrowVisualStateName = "NarrowVisualState";
+        #endregion
 
         #region DependencyProperties
         public static readonly DependencyProperty PrimaryMenuItemsProperty = DependencyProperty.Register(
             nameof(PrimaryMenuItems),
             typeof(ObservableCollection<NavigationMenuItem>),
             typeof(NavigationMenuView),
-            new PropertyMetadata(new ObservableCollection<NavigationMenuItem>(),
-                (sender, args) =>
-                {
-                    var control = sender as NavigationMenuView;
-                    if (control == null)
-                        return;
+            new PropertyMetadata(new ObservableCollection<NavigationMenuItem>(), OnMenuItemsCollectionChanged));
 
-                    var oldCollection = args.OldValue as ObservableCollection<NavigationMenuItem>;
-                    if (oldCollection != null)
-                    {
-                        oldCollection.CollectionChanged -= control.PrimaryMenuItems_CollectionChanged;
-
-                        foreach (var menuItem in oldCollection)
-                        {
-                            control.UnregisterMenuItem(menuItem);
-                        }
-                    }
-
-                    var newCollection = args.NewValue as ObservableCollection<NavigationMenuItem>;
-                    control.RegisterNewMenuItemCollection(newCollection);
-                }));
+        public static readonly DependencyProperty SecondaryMenuItemsProperty = DependencyProperty.Register(
+            nameof(SecondaryMenuItems),
+            typeof(ObservableCollection<NavigationMenuItem>),
+            typeof(NavigationMenuView),
+            new PropertyMetadata(new ObservableCollection<NavigationMenuItem>(), OnMenuItemsCollectionChanged));
 
         public static readonly DependencyProperty MainMenuButtonIconProperty = DependencyProperty.Register(
             nameof(MainMenuButtonIcon),
@@ -88,11 +88,21 @@ namespace QKit.Controls
                         control.SetGlyphFontSize(menuItem);
                     }
                 }));
+
+        public static readonly DependencyProperty IsMenuOpenProperty = DependencyProperty.Register(
+            nameof(IsMenuOpen),
+            typeof(bool),
+            typeof(NavigationMenuView),
+            new PropertyMetadata(default(bool)));
         #endregion
 
-        #region Constants
-        private const string RootSplitViewName = "RootSplitView";
-        private const string NavigationMenuItemsGroupName = "NavigationMenuView.NavigationMenuItems";
+        #region Template Parts
+        private SplitView RootSplitView { get; set; }
+
+        private VisualStateGroup AdaptiveVisualStateGroup { get; set; }
+        private VisualState WideVisualState { get; set; }
+        private VisualState NormalVisualState { get; set; }
+        private VisualState NarrowVisualState { get; set; }
         #endregion
 
         #region Constructors
@@ -103,12 +113,16 @@ namespace QKit.Controls
         #endregion
 
         #region Properties
-        private SplitView RootSplitView { get; set; }
-
         public ObservableCollection<NavigationMenuItem> PrimaryMenuItems
         {
             get { return (ObservableCollection<NavigationMenuItem>)GetValue(PrimaryMenuItemsProperty); }
             set { SetValue(PrimaryMenuItemsProperty, value); }
+        }
+
+        public ObservableCollection<NavigationMenuItem> SecondaryMenuItems
+        {
+            get { return (ObservableCollection<NavigationMenuItem>)GetValue(SecondaryMenuItemsProperty); }
+            set { SetValue(SecondaryMenuItemsProperty, value); }
         }
 
         public IconElement MainMenuButtonIcon
@@ -138,16 +152,51 @@ namespace QKit.Controls
         public double FontIconGlyphSize
         {
             get { return (double)GetValue(FontIconGlyphSizeProperty); }
-            private set { SetValue(FontIconGlyphSizeProperty, value); }
+            set { SetValue(FontIconGlyphSizeProperty, value); }
+        }
+
+        public bool IsMenuOpen
+        {
+            get { return (bool)GetValue(IsMenuOpenProperty); }
+            set { SetValue(IsMenuOpenProperty, value); }
         }
         #endregion
 
         #region Methods
         protected override void OnApplyTemplate()
         {
-            RootSplitView = (SplitView)GetTemplateChild(RootSplitViewName);
+            RootSplitView = GetTemplateChild(RootSplitViewName) as SplitView;
+
+            AdaptiveVisualStateGroup = GetTemplateChild(AdaptiveVisualStateGroupName) as VisualStateGroup;
+            WideVisualState = GetTemplateChild(WideVisualStateName) as VisualState;
+            NormalVisualState = GetTemplateChild(NormalVisualStateName) as VisualState;
+            NarrowVisualState = GetTemplateChild(NarrowVisualStateName) as VisualState;
+
+            if (AdaptiveVisualStateGroup != null)
+                AdaptiveVisualStateGroup.CurrentStateChanged += AdaptiveVisualStateGroupElement_CurrentStateChanged;
+
+            UpdateSplitViewStates();
             SetSplitViewContent();
             RegisterNewMenuItemCollection(PrimaryMenuItems);
+            RegisterNewMenuItemCollection(SecondaryMenuItems);
+        }
+
+        private void UpdateSplitViewStates()
+        {
+            IsMenuOpen = false;
+
+            if (RootSplitView != null)
+            {
+                if (AdaptiveVisualStateGroup.CurrentState == WideVisualState)
+                {
+                    RootSplitView.DisplayMode = SplitViewDisplayMode.CompactInline;
+                    IsMenuOpen = true;
+                }
+                else if (AdaptiveVisualStateGroup.CurrentState == NormalVisualState)
+                    RootSplitView.DisplayMode = SplitViewDisplayMode.CompactOverlay;
+                else
+                    RootSplitView.DisplayMode = SplitViewDisplayMode.Overlay;
+            }
         }
 
         private void SetSplitViewContent()
@@ -175,8 +224,8 @@ namespace QKit.Controls
                 RegisterMenuItem(menuItem);
             }
 
-            PrimaryMenuItems.CollectionChanged -= PrimaryMenuItems_CollectionChanged;
-            PrimaryMenuItems.CollectionChanged += PrimaryMenuItems_CollectionChanged;
+            menuItems.CollectionChanged -= MenuItems_CollectionChanged;
+            menuItems.CollectionChanged += MenuItems_CollectionChanged;
         }
 
         private void RegisterMenuItem(NavigationMenuItem menuItem)
@@ -205,7 +254,33 @@ namespace QKit.Controls
         #endregion
 
         #region Event Handlers
-        private void PrimaryMenuItems_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+        private static void OnMenuItemsCollectionChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            var control = d as NavigationMenuView;
+            if (control == null)
+                return;
+
+            var oldCollection = e.OldValue as ObservableCollection<NavigationMenuItem>;
+            if (oldCollection != null)
+            {
+                oldCollection.CollectionChanged -= control.MenuItems_CollectionChanged;
+
+                foreach (var menuItem in oldCollection)
+                {
+                    control.UnregisterMenuItem(menuItem);
+                }
+            }
+
+            var newCollection = e.NewValue as ObservableCollection<NavigationMenuItem>;
+            control.RegisterNewMenuItemCollection(newCollection);
+        }
+
+        private void AdaptiveVisualStateGroupElement_CurrentStateChanged(object sender, VisualStateChangedEventArgs e)
+        {
+            UpdateSplitViewStates();
+        }
+
+        private void MenuItems_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
             if (e.OldItems != null)
                 foreach (var menuItem in e.OldItems)
@@ -223,6 +298,11 @@ namespace QKit.Controls
         private void MenuItem_Checked(object sender, RoutedEventArgs e)
         {
             SelectedMenuItem = sender as NavigationMenuItem;
+
+            if (AdaptiveVisualStateGroup != null &&
+                AdaptiveVisualStateGroup.CurrentState != WideVisualState)
+                IsMenuOpen = false;
+
             OnSelectedMenuItemChanged();
         }
         #endregion

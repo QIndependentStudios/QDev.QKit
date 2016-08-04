@@ -19,8 +19,8 @@ namespace QKit.Controls
         public const string MasterPresenterName = "MasterPresenter";
         public const string DetailsPresenterName = "DetailsPresenter";
         public const string AdaptiveVisualStateGroupName = "AdaptiveVisualStateGroup";
-        public const string NormalVisualStateName = "VisualStateNormal";
-        public const string NarrowVisualStateName = "VisualStateNarrow";
+        public const string NormalVisualStateName = "NormalVisualState";
+        public const string NarrowVisualStateName = "NarrowVisualState";
         public const string DetailsDrillInAnimationName = "DetailsDrillIn";
         public const string DetailsDrillOutAnimationName = "DetailsDrillOut";
         #endregion
@@ -65,12 +65,12 @@ namespace QKit.Controls
                 {
                     var control = sender as MasterDetailsView;
 
-                    if (control == null || control.AdaptiveVisualStateGroupElement == null)
+                    if (control == null || control.AdaptiveVisualStateGroup == null)
                         return;
 
                     // Not a visual state change, but still a logical state change.
                     // ex. VisualStateNarrow/MasterView -> VisualStateNarrow/DetailsView
-                    control._previousState = control.AdaptiveVisualStateGroupElement.CurrentState;
+                    control._previousState = control.AdaptiveVisualStateGroup.CurrentState;
                     control.UpdateViewState();
                 }));
 
@@ -85,9 +85,9 @@ namespace QKit.Controls
         private ContentPresenter MasterPresenter { get; set; }
         private ContentControl DetailsPresenter { get; set; }
 
-        private VisualStateGroup AdaptiveVisualStateGroupElement { get; set; }
-        private VisualState NormalVisualStateElement { get; set; }
-        private VisualState NarrowVisualStateElement { get; set; }
+        private VisualStateGroup AdaptiveVisualStateGroup { get; set; }
+        private VisualState NormalVisualState { get; set; }
+        private VisualState NarrowVisualState { get; set; }
 
         private Storyboard DetailDrillIn { get; set; }
         private Storyboard DetailDrillOut { get; set; }
@@ -158,12 +158,12 @@ namespace QKit.Controls
             DetailsPresenter = GetTemplateChild(DetailsPresenterName) as ContentControl;
 
             // Visual States
-            AdaptiveVisualStateGroupElement = GetTemplateChild(AdaptiveVisualStateGroupName) as VisualStateGroup;
-            NormalVisualStateElement = GetTemplateChild(NormalVisualStateName) as VisualState;
-            NarrowVisualStateElement = GetTemplateChild(NarrowVisualStateName) as VisualState;
+            AdaptiveVisualStateGroup = GetTemplateChild(AdaptiveVisualStateGroupName) as VisualStateGroup;
+            NormalVisualState = GetTemplateChild(NormalVisualStateName) as VisualState;
+            NarrowVisualState = GetTemplateChild(NarrowVisualStateName) as VisualState;
 
-            if (AdaptiveVisualStateGroupElement != null)
-                AdaptiveVisualStateGroupElement.CurrentStateChanged += AdaptiveVisualStateGroupElement_CurrentStateChanged;
+            if (AdaptiveVisualStateGroup != null)
+                AdaptiveVisualStateGroup.CurrentStateChanged += AdaptiveVisualStateGroupElement_CurrentStateChanged;
 
             // Animations
             DetailDrillIn = GetTemplateChild(DetailsDrillInAnimationName) as Storyboard;
@@ -172,9 +172,9 @@ namespace QKit.Controls
 
         private void UpdateViewState()
         {
-            var previousState = _previousState ?? NormalVisualStateElement;
-            if (previousState == NormalVisualStateElement &&
-                AdaptiveVisualStateGroupElement.CurrentState == NarrowVisualStateElement)
+            var previousState = _previousState ?? NormalVisualState;
+            if (previousState == NormalVisualState &&
+                AdaptiveVisualStateGroup.CurrentState == NarrowVisualState)
             {
                 if (IsDetailsViewInStackedMode)
                 {
@@ -196,8 +196,8 @@ namespace QKit.Controls
                 UpdateReadonlyStateProperties();
                 OnViewStateChanged();
             }
-            else if (previousState == NarrowVisualStateElement &&
-                AdaptiveVisualStateGroupElement.CurrentState == NormalVisualStateElement)
+            else if (previousState == NarrowVisualState &&
+                AdaptiveVisualStateGroup.CurrentState == NormalVisualState)
             {
                 // master -> normal
                 // details -> normal
@@ -205,8 +205,8 @@ namespace QKit.Controls
                 UpdateReadonlyStateProperties();
                 OnViewStateChanged();
             }
-            else if (previousState == NarrowVisualStateElement &&
-                AdaptiveVisualStateGroupElement.CurrentState == NarrowVisualStateElement)
+            else if (previousState == NarrowVisualState &&
+                AdaptiveVisualStateGroup.CurrentState == NarrowVisualState)
             {
                 if (IsDetailsViewInStackedMode)
                 {// master -> details
@@ -231,13 +231,13 @@ namespace QKit.Controls
 
         private void UpdateReadonlyStateProperties()
         {
-            if (AdaptiveVisualStateGroupElement == null)
+            if (AdaptiveVisualStateGroup == null)
                 return;
 
-            IsStackedMode = AdaptiveVisualStateGroupElement.CurrentState == NarrowVisualStateElement;
+            IsStackedMode = AdaptiveVisualStateGroup.CurrentState == NarrowVisualState;
 
             CanExitDetailsView = IsDetailsViewInStackedMode &&
-                AdaptiveVisualStateGroupElement.CurrentState == NarrowVisualStateElement;
+                AdaptiveVisualStateGroup.CurrentState == NarrowVisualState;
         }
 
         private void OnViewStateChanged()

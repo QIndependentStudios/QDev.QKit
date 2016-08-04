@@ -64,7 +64,9 @@ namespace QKitTestApp.Views
         internal void HighlightCurrentMenuItem(Type pageType, object pageParam)
         {
             // match type only
-            var menuItems = NavigationMenuRoot.PrimaryMenuItems.Where(x => Equals(x.PageType, pageType));
+            var menuItems = NavigationMenuRoot.PrimaryMenuItems
+                .Union(NavigationMenuRoot.SecondaryMenuItems)
+                .Where(x => Equals(x.PageType, pageType));
 
             // serialize parameter for matching
             if (pageParam == null)

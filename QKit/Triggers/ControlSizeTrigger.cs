@@ -29,13 +29,13 @@ namespace QKit.Triggers
             nameof(MinimumHeight),
             typeof(double),
             typeof(ControlSizeTrigger),
-            new PropertyMetadata(double.NaN, new PropertyChangedCallback(MinimumSize_PropertyChanged)));
+            new PropertyMetadata(double.NaN, OnMinimumSizeChanged));
 
         public static readonly DependencyProperty MinimumWidthProperty = DependencyProperty.Register(
             nameof(MinimumWidth),
             typeof(double),
             typeof(ControlSizeTrigger),
-            new PropertyMetadata(double.NaN, new PropertyChangedCallback(MinimumSize_PropertyChanged)));
+            new PropertyMetadata(double.NaN, OnMinimumSizeChanged));
         #endregion
 
         #region Properties
@@ -86,7 +86,7 @@ namespace QKit.Triggers
             UpdateIsActive();
         }
 
-        private static void MinimumSize_PropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        private static void OnMinimumSizeChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             var trigger = d as ControlSizeTrigger;
 

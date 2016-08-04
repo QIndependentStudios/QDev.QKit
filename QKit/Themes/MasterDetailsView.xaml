@@ -73,7 +73,7 @@
                         </Grid>
                         <VisualStateManager.VisualStateGroups>
                             <VisualStateGroup x:Name="AdaptiveVisualStateGroup">
-                                <VisualState x:Name="VisualStateNormal">
+                                <VisualState x:Name="NormalVisualState">
                                     <VisualState.StateTriggers>
                                         <triggers:ControlSizeTrigger TargetElement="{Binding ElementName=ControlRoot}"
                                                                      MinimumWidth="{Binding NormalStateMinWidth, RelativeSource={RelativeSource TemplatedParent}}" />
@@ -85,7 +85,7 @@
                                                 Value="*" />
                                     </VisualState.Setters>
                                 </VisualState>
-                                <VisualState x:Name="VisualStateNarrow">
+                                <VisualState x:Name="NarrowVisualState">
                                     <VisualState.StateTriggers>
                                         <triggers:ControlSizeTrigger TargetElement="{Binding ElementName=ControlRoot}"
                                                                      MinimumWidth="{StaticResource NarrowMinWidth}" />
