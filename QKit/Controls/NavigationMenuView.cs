@@ -94,6 +94,30 @@ namespace QKit.Controls
             typeof(bool),
             typeof(NavigationMenuView),
             new PropertyMetadata(default(bool)));
+
+        public static readonly DependencyProperty NormalStateMinWidthProperty = DependencyProperty.Register(
+            nameof(NormalStateMinWidth),
+            typeof(double),
+            typeof(NavigationMenuView),
+            new PropertyMetadata(default(double)));
+
+        public static readonly DependencyProperty WideStateMinWidthProperty = DependencyProperty.Register(
+            nameof(WideStateMinWidth),
+            typeof(double),
+            typeof(NavigationMenuView),
+            new PropertyMetadata(default(double)));
+
+        public static readonly DependencyProperty CompactMenuWidthProperty = DependencyProperty.Register(
+            nameof(CompactMenuWidth),
+            typeof(double),
+            typeof(NavigationMenuView),
+            new PropertyMetadata(default(double)));
+
+        public static readonly DependencyProperty MenuPaneWidthProperty = DependencyProperty.Register(
+            nameof(MenuPaneWidth),
+            typeof(double),
+            typeof(NavigationMenuView),
+            new PropertyMetadata(default(double)));
         #endregion
 
         #region Template Parts
@@ -159,6 +183,30 @@ namespace QKit.Controls
         {
             get { return (bool)GetValue(IsMenuOpenProperty); }
             set { SetValue(IsMenuOpenProperty, value); }
+        }
+
+        public double NormalStateMinWidth
+        {
+            get { return (double)GetValue(NormalStateMinWidthProperty); }
+            set { SetValue(NormalStateMinWidthProperty, value); }
+        }
+
+        public double WideStateMinWidth
+        {
+            get { return (double)GetValue(WideStateMinWidthProperty); }
+            set { SetValue(WideStateMinWidthProperty, value); }
+        }
+
+        public double CompactMenuWidth
+        {
+            get { return (double)GetValue(CompactMenuWidthProperty); }
+            set { SetValue(CompactMenuWidthProperty, value); }
+        }
+
+        public double MenuPaneWidth
+        {
+            get { return (double)GetValue(MenuPaneWidthProperty); }
+            set { SetValue(MenuPaneWidthProperty, value); }
         }
         #endregion
 

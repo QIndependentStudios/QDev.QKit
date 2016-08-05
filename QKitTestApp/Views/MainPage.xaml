@@ -36,6 +36,7 @@
 
         <qkit:MasterDetailsView x:Name="MasterDetails"
                                 Grid.Row="1"
+                                NormalStateMinWidth="672"
                                 ViewStateChanged="{x:Bind ViewModel.MasterDetails_ViewStateChanged}">
             <interactivity:Interaction.Behaviors>
                 <behaviors:BackButtonBehavior Handled="{x:Bind MasterDetails.CanExitDetailsView, Mode=OneWay}">
@@ -46,7 +47,9 @@
             </interactivity:Interaction.Behaviors>
             <qkit:MasterDetailsView.DetailsTemplate>
                 <DataTemplate>
-                    <Button Content="test" />
+                    <Button Content="test"
+                            HorizontalAlignment="Stretch"
+                            VerticalAlignment="Stretch" />
                 </DataTemplate>
             </qkit:MasterDetailsView.DetailsTemplate>
             <ListView x:Name="MasterList"

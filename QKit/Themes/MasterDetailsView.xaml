@@ -41,36 +41,6 @@
                                                         ExitTargetName="DetailsPresenter" />
                             </Storyboard>
                         </Border.Resources>
-                        <Grid>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition x:Name="MasterPane"
-                                                  Width="{Binding MasterPaneWidth, RelativeSource={RelativeSource TemplatedParent}}" />
-                                <ColumnDefinition x:Name="DetailsPane"
-                                                  Width="*" />
-                            </Grid.ColumnDefinitions>
-                            <!-- Should be a ContentPresenter but crashes without a template for some reason. -->
-                            <ContentControl x:Name="DetailsPresenter"
-                                            HorizontalAlignment="Stretch"
-                                            VerticalAlignment="Stretch"
-                                            HorizontalContentAlignment="Stretch"
-                                            VerticalContentAlignment="Stretch"
-                                            Content="{TemplateBinding Details}"
-                                            ContentTemplate="{TemplateBinding DetailsTemplate}"
-                                            Grid.Column="1">
-                                <ContentControl.ContentTransitions>
-                                    <TransitionCollection>
-                                        <ContentThemeTransition />
-                                    </TransitionCollection>
-                                </ContentControl.ContentTransitions>
-                            </ContentControl>
-                            <ContentPresenter x:Name="MasterPresenter"
-                                              Content="{TemplateBinding Content}"
-                                              ContentTemplate="{TemplateBinding ContentTemplate}"
-                                              Margin="{TemplateBinding Padding}"
-                                              ContentTransitions="{TemplateBinding ContentTransitions}"
-                                              HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
-                                              VerticalAlignment="{TemplateBinding VerticalContentAlignment}" />
-                        </Grid>
                         <VisualStateManager.VisualStateGroups>
                             <VisualStateGroup x:Name="AdaptiveVisualStateGroup">
                                 <VisualState x:Name="NormalVisualState">
@@ -101,6 +71,30 @@
                                 </VisualState>
                             </VisualStateGroup>
                         </VisualStateManager.VisualStateGroups>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition x:Name="MasterPane"
+                                                  Width="{Binding MasterPaneWidth, RelativeSource={RelativeSource TemplatedParent}}" />
+                                <ColumnDefinition x:Name="DetailsPane"
+                                                  Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <!-- Should be a ContentPresenter but crashes without a template for some reason. -->
+                            <ContentControl x:Name="DetailsPresenter"
+                                            HorizontalAlignment="Stretch"
+                                            VerticalAlignment="Stretch"
+                                            HorizontalContentAlignment="Stretch"
+                                            VerticalContentAlignment="Stretch"
+                                            Content="{TemplateBinding Details}"
+                                            ContentTemplate="{TemplateBinding DetailsTemplate}"
+                                            Grid.Column="1" />
+                            <ContentPresenter x:Name="MasterPresenter"
+                                              Content="{TemplateBinding Content}"
+                                              ContentTemplate="{TemplateBinding ContentTemplate}"
+                                              Margin="{TemplateBinding Padding}"
+                                              ContentTransitions="{TemplateBinding ContentTransitions}"
+                                              HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                              VerticalAlignment="{TemplateBinding VerticalContentAlignment}" />
+                        </Grid>
                     </Border>
                 </ControlTemplate>
             </Setter.Value>
