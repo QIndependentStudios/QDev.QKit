@@ -1,7 +1,9 @@
-﻿using System.Collections.ObjectModel;
+﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Markup;
 
 namespace QKit.Controls
 {
@@ -9,8 +11,13 @@ namespace QKit.Controls
     [TemplateVisualState(Name = WideVisualStateName, GroupName = AdaptiveVisualStateGroupName)]
     [TemplateVisualState(Name = NormalVisualStateName, GroupName = AdaptiveVisualStateGroupName)]
     [TemplateVisualState(Name = NarrowVisualStateName, GroupName = AdaptiveVisualStateGroupName)]
+    [ContentProperty(Name = nameof(PrimaryMenuItems))]
     public sealed class NavigationMenuView : Control
     {
+        #region Instances
+        internal static List<NavigationMenuView> Instances = new List<NavigationMenuView>();
+        #endregion
+
         #region Events
         public delegate void SelectedMenuItemChangedEventHandler(object sender, RoutedEventArgs e);
         public event SelectedMenuItemChangedEventHandler SelectedMenuItemChanged;
@@ -93,7 +100,16 @@ namespace QKit.Controls
             nameof(IsMenuOpen),
             typeof(bool),
             typeof(NavigationMenuView),
-            new PropertyMetadata(default(bool)));
+            new PropertyMetadata(default(bool),
+                (sender, args) =>
+                {
+                    var control = sender as NavigationMenuView;
+
+                    if (control == null)
+                        return;
+
+                    control.SetSplitViewPaneIsOpen((bool)args.NewValue);
+                }));
 
         public static readonly DependencyProperty NormalStateMinWidthProperty = DependencyProperty.Register(
             nameof(NormalStateMinWidth),
@@ -133,6 +149,8 @@ namespace QKit.Controls
         public NavigationMenuView()
         {
             DefaultStyleKey = typeof(NavigationMenuView);
+            Instances.Add(this);
+            Unloaded += NavigationMenuView_Unloaded;
         }
         #endregion
 
@@ -214,6 +232,7 @@ namespace QKit.Controls
         protected override void OnApplyTemplate()
         {
             RootSplitView = GetTemplateChild(RootSplitViewName) as SplitView;
+            RootSplitView.PaneClosed += RootSplitView_PaneClosed;
 
             AdaptiveVisualStateGroup = GetTemplateChild(AdaptiveVisualStateGroupName) as VisualStateGroup;
             WideVisualState = GetTemplateChild(WideVisualStateName) as VisualState;
@@ -231,20 +250,25 @@ namespace QKit.Controls
 
         private void UpdateSplitViewStates()
         {
-            IsMenuOpen = false;
-
             if (RootSplitView != null)
             {
                 if (AdaptiveVisualStateGroup.CurrentState == WideVisualState)
                 {
-                    RootSplitView.DisplayMode = SplitViewDisplayMode.CompactInline;
                     IsMenuOpen = true;
+                    RootSplitView.PaneClosed += RootSplitView_PaneClosed1;
                 }
                 else if (AdaptiveVisualStateGroup.CurrentState == NormalVisualState)
                     RootSplitView.DisplayMode = SplitViewDisplayMode.CompactOverlay;
                 else
                     RootSplitView.DisplayMode = SplitViewDisplayMode.Overlay;
             }
+        }
+
+        private void RootSplitView_PaneClosed1(SplitView sender, object args)
+        {
+            RootSplitView.PaneClosed -= RootSplitView_PaneClosed1;
+            RootSplitView.DisplayMode = SplitViewDisplayMode.CompactInline;
+            IsMenuOpen = true;
         }
 
         private void SetSplitViewContent()
@@ -291,6 +315,12 @@ namespace QKit.Controls
             menuItem.Checked -= MenuItem_Checked;
         }
 
+        private void SetSplitViewPaneIsOpen(bool isOpen)
+        {
+            if (RootSplitView != null && RootSplitView.IsPaneOpen != isOpen)
+                RootSplitView.IsPaneOpen = isOpen;
+        }
+
         private void OnSelectedMenuItemChanged()
         {
             if (SelectedMenuItemChanged == null)
@@ -321,6 +351,16 @@ namespace QKit.Controls
 
             var newCollection = e.NewValue as ObservableCollection<NavigationMenuItem>;
             control.RegisterNewMenuItemCollection(newCollection);
+        }
+
+        private void NavigationMenuView_Unloaded(object sender, RoutedEventArgs e)
+        {
+            Instances.Remove(this);
+        }
+
+        private void RootSplitView_PaneClosed(SplitView sender, object args)
+        {
+            IsMenuOpen = false;
         }
 
         private void AdaptiveVisualStateGroupElement_CurrentStateChanged(object sender, VisualStateChangedEventArgs e)

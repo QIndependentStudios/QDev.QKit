@@ -9,11 +9,13 @@ namespace QKit.Controls
     [TemplatePart(Name = DetailsPresenterName, Type = typeof(ContentControl))]
     [TemplateVisualState(Name = NormalVisualStateName, GroupName = AdaptiveVisualStateGroupName)]
     [TemplateVisualState(Name = NarrowVisualStateName, GroupName = AdaptiveVisualStateGroupName)]
-    [ContentProperty(Name = nameof(Content))]
-    public sealed class MasterDetailsView : ContentControl
+    [ContentProperty(Name = nameof(DetailsView))]
+    public sealed class MasterDetailsView : Control
     {
+        #region Events
         public delegate void ViewStateChangedEventHandler(object sender, RoutedEventArgs e);
         public event ViewStateChangedEventHandler ViewStateChanged;
+        #endregion
 
         #region Constants
         public const string MasterPresenterName = "MasterPresenter";
@@ -38,14 +40,14 @@ namespace QKit.Controls
             typeof(MasterDetailsView),
             new PropertyMetadata(default(double)));
 
-        public static readonly DependencyProperty DetailsTemplateProperty = DependencyProperty.Register(
-            nameof(DetailsTemplate),
-            typeof(DataTemplate),
+        public static readonly DependencyProperty MasterViewProperty = DependencyProperty.Register(
+            nameof(MasterView),
+            typeof(object),
             typeof(MasterDetailsView),
-            new PropertyMetadata(default(DataTemplate)));
+            new PropertyMetadata(default(object)));
 
-        public static readonly DependencyProperty DetailsProperty = DependencyProperty.Register(
-            nameof(Details),
+        public static readonly DependencyProperty DetailsViewProperty = DependencyProperty.Register(
+            nameof(DetailsView),
             typeof(object),
             typeof(MasterDetailsView),
             new PropertyMetadata(default(object)));
@@ -110,16 +112,16 @@ namespace QKit.Controls
             set { SetValue(MasterPaneWidthProperty, value); }
         }
 
-        public DataTemplate DetailsTemplate
+        public object MasterView
         {
-            get { return (DataTemplate)GetValue(DetailsTemplateProperty); }
-            set { SetValue(DetailsTemplateProperty, value); }
+            get { return GetValue(MasterViewProperty); }
+            set { SetValue(MasterViewProperty, value); }
         }
 
-        public object Details
+        public object DetailsView
         {
-            get { return GetValue(DetailsProperty); }
-            set { SetValue(DetailsProperty, value); }
+            get { return GetValue(DetailsViewProperty); }
+            set { SetValue(DetailsViewProperty, value); }
         }
 
         public bool IsStackedMode

@@ -79,21 +79,18 @@
                                                   Width="*" />
                             </Grid.ColumnDefinitions>
                             <!-- Should be a ContentPresenter but crashes without a template for some reason. -->
-                            <ContentControl x:Name="DetailsPresenter"
-                                            HorizontalAlignment="Stretch"
-                                            VerticalAlignment="Stretch"
-                                            HorizontalContentAlignment="Stretch"
-                                            VerticalContentAlignment="Stretch"
-                                            Content="{TemplateBinding Details}"
-                                            ContentTemplate="{TemplateBinding DetailsTemplate}"
-                                            Grid.Column="1" />
                             <ContentPresenter x:Name="MasterPresenter"
-                                              Content="{TemplateBinding Content}"
-                                              ContentTemplate="{TemplateBinding ContentTemplate}"
+                                              Content="{TemplateBinding MasterView}"
                                               Margin="{TemplateBinding Padding}"
-                                              ContentTransitions="{TemplateBinding ContentTransitions}"
                                               HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
                                               VerticalAlignment="{TemplateBinding VerticalContentAlignment}" />
+                            <ContentPresenter x:Name="DetailsPresenter"
+                                              HorizontalAlignment="Stretch"
+                                              VerticalAlignment="Stretch"
+                                              HorizontalContentAlignment="Stretch"
+                                              VerticalContentAlignment="Stretch"
+                                              Content="{TemplateBinding DetailsView}"
+                                              Grid.Column="1" />
                         </Grid>
                     </Border>
                 </ControlTemplate>

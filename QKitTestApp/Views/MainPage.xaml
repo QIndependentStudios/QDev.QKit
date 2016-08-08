@@ -45,28 +45,28 @@
                                                Value="False" />
                 </behaviors:BackButtonBehavior>
             </interactivity:Interaction.Behaviors>
-            <qkit:MasterDetailsView.DetailsTemplate>
-                <DataTemplate>
-                    <Button Content="test"
-                            HorizontalAlignment="Stretch"
-                            VerticalAlignment="Stretch" />
-                </DataTemplate>
-            </qkit:MasterDetailsView.DetailsTemplate>
-            <ListView x:Name="MasterList"
-                      IsItemClickEnabled="True"
-                      SelectionMode="{x:Bind MasterDetails.IsStackedMode, Mode=OneWay, Converter={StaticResource MasterDetailsSelectionModeConverter}}">
-                <interactivity:Interaction.Behaviors>
-                    <core:EventTriggerBehavior EventName="ItemClick">
-                        <core:ChangePropertyAction TargetObject="{x:Bind MasterDetails}"
-                                                   PropertyName="IsDetailsViewInStackedMode"
-                                                   Value="True" />
-                    </core:EventTriggerBehavior>
-                </interactivity:Interaction.Behaviors>
+            <qkit:MasterDetailsView.MasterView>
+                <ListView x:Name="MasterList"
+                          IsItemClickEnabled="True"
+                          SelectionMode="{x:Bind MasterDetails.IsStackedMode, Mode=OneWay, Converter={StaticResource MasterDetailsSelectionModeConverter}}">
+                    <interactivity:Interaction.Behaviors>
+                        <core:EventTriggerBehavior EventName="ItemClick">
+                            <core:ChangePropertyAction TargetObject="{x:Bind MasterDetails}"
+                                                       PropertyName="IsDetailsViewInStackedMode"
+                                                       Value="True" />
+                        </core:EventTriggerBehavior>
+                    </interactivity:Interaction.Behaviors>
 
-                <x:String>blah</x:String>
-                <x:String>blah</x:String>
-                <x:String>blah</x:String>
-            </ListView>
+                    <x:String>blah</x:String>
+                    <x:String>blah</x:String>
+                    <x:String>blah</x:String>
+                </ListView>
+            </qkit:MasterDetailsView.MasterView>
+            <qkit:MasterDetailsView.DetailsView>
+                <Button Content="test"
+                        HorizontalAlignment="Stretch"
+                        VerticalAlignment="Stretch" />
+            </qkit:MasterDetailsView.DetailsView>
         </qkit:MasterDetailsView>
     </Grid>
 </Page>
