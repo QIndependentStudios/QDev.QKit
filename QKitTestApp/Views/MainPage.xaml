@@ -23,6 +23,29 @@
     </Page.DataContext>
 
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+
+        <VisualStateManager.VisualStateGroups>
+            <VisualStateGroup>
+                <VisualState>
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowWidth="0" />
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+                        <Setter Target="MainMenuButton.Visibility"
+                                Value="Visible" />
+                    </VisualState.Setters>
+                </VisualState>
+                <VisualState>
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowWidth="641" />
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+                        <Setter Target="MainMenuButton.Visibility"
+                                Value="Collapsed" />
+                    </VisualState.Setters>
+                </VisualState>
+            </VisualStateGroup>
+        </VisualStateManager.VisualStateGroups>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
@@ -46,21 +69,30 @@
                 </behaviors:BackButtonBehavior>
             </interactivity:Interaction.Behaviors>
             <qkit:MasterDetailsView.MasterView>
-                <ListView x:Name="MasterList"
-                          IsItemClickEnabled="True"
-                          SelectionMode="{x:Bind MasterDetails.IsStackedMode, Mode=OneWay, Converter={StaticResource MasterDetailsSelectionModeConverter}}">
-                    <interactivity:Interaction.Behaviors>
-                        <core:EventTriggerBehavior EventName="ItemClick">
-                            <core:ChangePropertyAction TargetObject="{x:Bind MasterDetails}"
-                                                       PropertyName="IsDetailsViewInStackedMode"
-                                                       Value="True" />
-                        </core:EventTriggerBehavior>
-                    </interactivity:Interaction.Behaviors>
+                <StackPanel>
+                    <RelativePanel>
+                        <qkit:NavigationMenuMainButton x:Name="MainMenuButton"
+                                                       Margin="0,0,0,0" />
+                        <TextBlock Text="MAIN PAGE"
+                                   RelativePanel.AlignVerticalCenterWithPanel="True"
+                                   RelativePanel.RightOf="MainMenuButton" />
+                    </RelativePanel>
+                    <ListView x:Name="MasterList"
+                              IsItemClickEnabled="True"
+                              SelectionMode="{x:Bind MasterDetails.IsStackedMode, Mode=OneWay, Converter={StaticResource MasterDetailsSelectionModeConverter}}">
+                        <interactivity:Interaction.Behaviors>
+                            <core:EventTriggerBehavior EventName="ItemClick">
+                                <core:ChangePropertyAction TargetObject="{x:Bind MasterDetails}"
+                                                           PropertyName="IsDetailsViewInStackedMode"
+                                                           Value="True" />
+                            </core:EventTriggerBehavior>
+                        </interactivity:Interaction.Behaviors>
 
-                    <x:String>blah</x:String>
-                    <x:String>blah</x:String>
-                    <x:String>blah</x:String>
-                </ListView>
+                        <x:String>blah</x:String>
+                        <x:String>blah</x:String>
+                        <x:String>blah</x:String>
+                    </ListView>
+                </StackPanel>
             </qkit:MasterDetailsView.MasterView>
             <qkit:MasterDetailsView.DetailsView>
                 <Button Content="test"

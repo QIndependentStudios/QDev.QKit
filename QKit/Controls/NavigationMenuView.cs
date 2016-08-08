@@ -250,25 +250,19 @@ namespace QKit.Controls
 
         private void UpdateSplitViewStates()
         {
+            IsMenuOpen = false;
             if (RootSplitView != null)
             {
                 if (AdaptiveVisualStateGroup.CurrentState == WideVisualState)
                 {
+                    RootSplitView.DisplayMode = SplitViewDisplayMode.CompactInline;
                     IsMenuOpen = true;
-                    RootSplitView.PaneClosed += RootSplitView_PaneClosed1;
                 }
                 else if (AdaptiveVisualStateGroup.CurrentState == NormalVisualState)
                     RootSplitView.DisplayMode = SplitViewDisplayMode.CompactOverlay;
                 else
                     RootSplitView.DisplayMode = SplitViewDisplayMode.Overlay;
             }
-        }
-
-        private void RootSplitView_PaneClosed1(SplitView sender, object args)
-        {
-            RootSplitView.PaneClosed -= RootSplitView_PaneClosed1;
-            RootSplitView.DisplayMode = SplitViewDisplayMode.CompactInline;
-            IsMenuOpen = true;
         }
 
         private void SetSplitViewContent()

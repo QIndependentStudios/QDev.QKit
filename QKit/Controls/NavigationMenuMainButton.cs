@@ -18,7 +18,6 @@ namespace QKit.Controls
         {
             DefaultStyleKey = typeof(NavigationMenuMainButton);
             Click += NavigationMenuMainButton_Click;
-            Unloaded += NavigationMenuMainButton_Unloaded;
         }
         #endregion
 
@@ -37,12 +36,6 @@ namespace QKit.Controls
             {
                 menu.IsMenuOpen = !menu.IsMenuOpen;
             }
-        }
-
-        private void NavigationMenuMainButton_Unloaded(object sender, RoutedEventArgs e)
-        {
-            Click -= NavigationMenuMainButton_Click;
-            Unloaded -= NavigationMenuMainButton_Unloaded;
         }
         #endregion
     }

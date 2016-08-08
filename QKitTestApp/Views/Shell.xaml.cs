@@ -85,12 +85,18 @@ namespace QKitTestApp.Views
             // add parameter match
             menuItems = menuItems.Where(x => Equals(x.PageParameters, null) || Equals(x.PageParameters, pageParam));
             var menuItem = menuItems.Select(x => x).FirstOrDefault();
-            menuItem.IsChecked = true;
+            if (menuItem != null)
+                menuItem.IsChecked = true;
         }
 
         private void NavigationService_AfterRestoreSavedNavigation(object sender, Type e)
         {
-            HighlightCurrentMenuItem(_navigationService.CurrentPageType, _navigationService.CurrentPageParam);
+            // _navigationService.CurrentPageType and CurrentPageParam is broken and only returns null. Workaround below.
+            var savedNavigationServiceState = _navigationService.FrameFacade.PageStateSettingsService(_navigationService.GetType().ToString());
+            var currentPageType = Type.GetType(savedNavigationServiceState.Read<string>("CurrentPageType"));
+            var currentPageParam = savedNavigationServiceState.Read<object>("CurrentPageParam");
+
+            HighlightCurrentMenuItem(currentPageType, currentPageParam);
         }
 
         private void FrameFacade_Navigated(object sender, NavigatedEventArgs e)

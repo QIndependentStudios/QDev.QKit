@@ -6,7 +6,7 @@ using Windows.UI.Xaml.Media.Animation;
 namespace QKit.Controls
 {
     [TemplatePart(Name = MasterPresenterName, Type = typeof(ContentPresenter))]
-    [TemplatePart(Name = DetailsPresenterName, Type = typeof(ContentControl))]
+    [TemplatePart(Name = DetailsPresenterName, Type = typeof(ContentPresenter))]
     [TemplateVisualState(Name = NormalVisualStateName, GroupName = AdaptiveVisualStateGroupName)]
     [TemplateVisualState(Name = NarrowVisualStateName, GroupName = AdaptiveVisualStateGroupName)]
     [ContentProperty(Name = nameof(DetailsView))]
@@ -85,7 +85,7 @@ namespace QKit.Controls
 
         #region Template Parts
         private ContentPresenter MasterPresenter { get; set; }
-        private ContentControl DetailsPresenter { get; set; }
+        private ContentPresenter DetailsPresenter { get; set; }
 
         private VisualStateGroup AdaptiveVisualStateGroup { get; set; }
         private VisualState NormalVisualState { get; set; }
@@ -157,7 +157,7 @@ namespace QKit.Controls
         {
             // Controls
             MasterPresenter = GetTemplateChild(MasterPresenterName) as ContentPresenter;
-            DetailsPresenter = GetTemplateChild(DetailsPresenterName) as ContentControl;
+            DetailsPresenter = GetTemplateChild(DetailsPresenterName) as ContentPresenter;
 
             // Visual States
             AdaptiveVisualStateGroup = GetTemplateChild(AdaptiveVisualStateGroupName) as VisualStateGroup;
