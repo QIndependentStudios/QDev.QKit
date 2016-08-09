@@ -71,7 +71,7 @@
                                 </VisualState>
                             </VisualStateGroup>
                         </VisualStateManager.VisualStateGroups>
-                        <Grid>
+                        <Grid Margin="{TemplateBinding Padding}">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition x:Name="MasterPane"
                                                   Width="{Binding MasterPaneWidth, RelativeSource={RelativeSource TemplatedParent}}" />
@@ -81,7 +81,6 @@
                             <!-- Should be a ContentPresenter but crashes without a template for some reason. -->
                             <ContentPresenter x:Name="MasterPresenter"
                                               Content="{TemplateBinding MasterView}"
-                                              Margin="{TemplateBinding Padding}"
                                               HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
                                               VerticalAlignment="{TemplateBinding VerticalContentAlignment}" />
                             <ContentPresenter x:Name="DetailsPresenter"

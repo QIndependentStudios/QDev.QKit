@@ -35,16 +35,10 @@
                 Value="{ThemeResource NavigationMenuButtonFontSize}" />
         <Setter Property="UseSystemFocusVisuals"
                 Value="True" />
-        <Setter Property="Icon">
-            <Setter.Value>
-                <FontIcon Glyph="&#xE700;"
-                          FontSize="{StaticResource NavigationMenuGlyphFontSize}" />
-            </Setter.Value>
-        </Setter>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="controls:NavigationMenuMainButton">
-                    <Grid Background="{TemplateBinding Background}">
+                    <Grid>
                         <VisualStateManager.VisualStateGroups>
                             <VisualStateGroup x:Name="CommonStates">
                                 <VisualState x:Name="Normal">
@@ -88,26 +82,32 @@
                                 </VisualState>
                             </VisualStateGroup>
                         </VisualStateManager.VisualStateGroups>
-                        <Rectangle x:Name="AccentOverlayBackground" />
-                        <StackPanel x:Name="RootGrid"
-                                    Background="{TemplateBinding Background}"
-                                    Padding="{TemplateBinding Padding}"
-                                    Orientation="Horizontal">
+                        <Rectangle x:Name="AccentOverlayBackground"
+                                   Grid.ColumnSpan="2" />
+                        <Grid x:Name="RootGrid"
+                              Background="{TemplateBinding Background}"
+                              Padding="{TemplateBinding Padding}">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
                             <ContentPresenter x:Name="IconPresenter"
-                                              Content="{TemplateBinding Icon}"
                                               Height="{ThemeResource NavigationMenuItemIconHeight}"
                                               Width="{ThemeResource NavigationMenuItemIconWidth}"
                                               Foreground="{TemplateBinding Foreground}"
-                                              HorizontalAlignment="Stretch"
-                                              AutomationProperties.AccessibilityView="Raw" />
+                                              AutomationProperties.AccessibilityView="Raw">
+                                <FontIcon Glyph="&#xE700;"
+                                          FontSize="{ThemeResource NavigationMenuGlyphFontSize}" />
+                            </ContentPresenter>
                             <ContentPresenter x:Name="ContentPresenter"
                                               AutomationProperties.AccessibilityView="Raw"
                                               ContentTemplate="{TemplateBinding ContentTemplate}"
                                               ContentTransitions="{TemplateBinding ContentTransitions}"
                                               Content="{TemplateBinding Content}"
                                               HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
-                                              VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}" />
-                        </StackPanel>
+                                              VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"
+                                              Grid.Column="1" />
+                        </Grid>
                     </Grid>
                 </ControlTemplate>
             </Setter.Value>
@@ -253,6 +253,8 @@
                 Value="{ThemeResource NavigationMenuCompactWidth}" />
         <Setter Property="MenuPaneWidth"
                 Value="{ThemeResource NavigationMenuPaneWidth}" />
+        <Setter Property="VerticalContentAlignment"
+                Value="Stretch" />
         <Setter Property="MainMenuButtonIcon">
             <Setter.Value>
                 <FontIcon Glyph="&#xE700;"

@@ -14,8 +14,6 @@
       xmlns:behaviors="using:Template10.Behaviors"
       mc:Ignorable="d">
     <Page.Resources>
-
-        <x:Double x:Key="NavigationMenuGlyphFontSize">15</x:Double>
     </Page.Resources>
 
     <Page.DataContext>
@@ -95,9 +93,12 @@
                 </StackPanel>
             </qkit:MasterDetailsView.MasterView>
             <qkit:MasterDetailsView.DetailsView>
-                <Button Content="test"
-                        HorizontalAlignment="Stretch"
-                        VerticalAlignment="Stretch" />
+                <StackPanel>
+                    <qkit:NavigationMenuMainButton />
+                    <Button Content="test"
+                            HorizontalAlignment="Stretch"
+                            VerticalAlignment="Stretch" />
+                </StackPanel>
             </qkit:MasterDetailsView.DetailsView>
         </qkit:MasterDetailsView>
     </Grid>
