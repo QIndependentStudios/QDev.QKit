@@ -38,14 +38,14 @@ namespace QKit.Controls
             var height = 0d;
             for (int i = 0; i < Children.Count; i += columnCount)
             {
-                var childrenForCurrentRow = Children.Skip(i).Take(columnCount);
+                var childrenForCurrentRow = Children.Skip(i).Take(columnCount).ToList();
 
                 foreach (var child in childrenForCurrentRow)
                 {
                     child.Measure(new Size(columnWidth, availableSize.Height));
                 }
 
-                height += childrenForCurrentRow.Select(c => c.DesiredSize.Height).Max();
+                height += childrenForCurrentRow.Any() ? childrenForCurrentRow.Select(c => c.DesiredSize.Height).Max() : 0;
             }
             return new Size(availableSize.Width, height);
         }
@@ -60,8 +60,8 @@ namespace QKit.Controls
 
             for (int i = 0; i < Children.Count; i += columnCount)
             {
-                var childrenForCurrentRow = Children.Skip(i).Take(columnCount).Cast<FrameworkElement>();
-                var rowMaxHeight = childrenForCurrentRow.Select(c => c.DesiredSize.Height).Max();
+                var childrenForCurrentRow = Children.Skip(i).Take(columnCount).Cast<FrameworkElement>().ToList();
+                var rowMaxHeight = childrenForCurrentRow.Any() ? childrenForCurrentRow.Select(c => c.DesiredSize.Height).Max() : 0;
 
                 foreach (var child in childrenForCurrentRow)
                 {
