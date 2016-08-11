@@ -95,11 +95,11 @@
                 <StackPanel>
                     <qkit:NavigationMenuMainButton />
                     <qkit:UniformWrapGrid ColumnMinWidth="100">
-                        <qkit:UniformFillGrid.ChildrenTransitions>
+                        <qkit:UniformWrapGrid.ChildrenTransitions>
                             <TransitionCollection>
                                 <RepositionThemeTransition />
                             </TransitionCollection>
-                        </qkit:UniformFillGrid.ChildrenTransitions>
+                        </qkit:UniformWrapGrid.ChildrenTransitions>
                         <Button Content="test1"
                                 HorizontalAlignment="Stretch"
                                 VerticalAlignment="Stretch" />
