@@ -2,7 +2,7 @@
 <package>
   <metadata>
     <id>QKit</id>
-    <version>0.1.11</version>
+    <version>0.2.0</version>
     <authors>Q</authors>
     <owners>Q</owners>
     <!--<iconUrl>http://ICON_URL_HERE_OR_DELETE_THIS_LINE</iconUrl>-->
@@ -10,11 +10,10 @@
     <description>A UWP class library containing useful controls and utilities for app development.</description>
     <releaseNotes>Stable MasterDetailsView</releaseNotes>
     <copyright></copyright>
-    <tags>UWP UWA</tags>
+    <tags>UWP UWA XAML Windows10</tags>
     <dependencies>
       <group targetFramework="uap10.0">
         <dependency id="Template10" version="1.1.11" />
-        <dependency id="System.Runtime.WindowsRuntime" version="4.0.11" />
         <dependency id="System.Collections" version="4.0.11" />
         <dependency id="System.Diagnostics.Debug" version="4.0.11" />
         <dependency id="System.Diagnostics.Tools" version="4.0.1" />
@@ -23,6 +22,7 @@
         <dependency id="System.Runtime" version="4.1.0" />
         <dependency id="System.Runtime.Extensions" version="4.1.0" />
         <dependency id="System.Runtime.InteropServices.WindowsRuntime" version="4.0.1" />
+        <dependency id="System.Runtime.WindowsRuntime" version="4.0.11" />
         <dependency id="System.Threading" version="4.0.11" />
       </group>
     </dependencies>
@@ -30,10 +30,16 @@
   <files>
     <file src="..\bin\ARM\Release\QKit.dll" target="runtimes\win10-arm\lib\uap10.0" />
     <file src="..\bin\ARM\Release\QKit.pdb" target="runtimes\win10-arm\lib\uap10.0" />
+    <file src="..\bin\ARM\Release\QKit.xr.xml" target="runtimes\win10-arm\lib\uap10.0\QKit" />
+    <file src="..\bin\ARM\Release\Themes\*.xbf" target="runtimes\win10-arm\lib\uap10.0\QKit\Themes" />
     <file src="..\bin\x64\Release\QKit.dll" target="runtimes\win10-x64\lib\uap10.0" />
     <file src="..\bin\x64\Release\QKit.pdb" target="runtimes\win10-x64\lib\uap10.0" />
+    <file src="..\bin\x64\Release\QKit.xr.xml" target="runtimes\win10-x64\lib\uap10.0\QKit" />
+    <file src="..\bin\x64\Release\Themes\*.xbf" target="runtimes\win10-x64\lib\uap10.0\QKit\Themes" />
     <file src="..\bin\x86\Release\QKit.dll" target="runtimes\win10-x86\lib\uap10.0" />
     <file src="..\bin\x86\Release\QKit.pdb" target="runtimes\win10-x86\lib\uap10.0" />
+    <file src="..\bin\x86\Release\QKit.xr.xml" target="runtimes\win10-x86\lib\uap10.0\QKit" />
+    <file src="..\bin\x86\Release\Themes\*.xbf" target="runtimes\win10-x86\lib\uap10.0\QKit\Themes" />
     <file src="..\bin\Release\QKit.dll" target="ref\uap10.0" />
     <file src="..\bin\Release\QKit.pri" target="ref\uap10.0" />
     <file src="..\bin\Release\QKit.xr.xml" target="ref\uap10.0\QKit" />

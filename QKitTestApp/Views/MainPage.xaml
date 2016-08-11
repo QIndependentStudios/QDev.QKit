@@ -21,7 +21,6 @@
     </Page.DataContext>
 
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-
         <VisualStateManager.VisualStateGroups>
             <VisualStateGroup>
                 <VisualState>
@@ -95,9 +94,25 @@
             <qkit:MasterDetailsView.DetailsView>
                 <StackPanel>
                     <qkit:NavigationMenuMainButton />
-                    <Button Content="test"
-                            HorizontalAlignment="Stretch"
-                            VerticalAlignment="Stretch" />
+                    <qkit:UniformWrapGrid ColumnMinWidth="100">
+                        <qkit:UniformFillGrid.ChildrenTransitions>
+                            <TransitionCollection>
+                                <RepositionThemeTransition />
+                            </TransitionCollection>
+                        </qkit:UniformFillGrid.ChildrenTransitions>
+                        <Button Content="test1"
+                                HorizontalAlignment="Stretch"
+                                VerticalAlignment="Stretch" />
+                        <Button Content="test2"
+                                HorizontalAlignment="Right"/>
+                        <Button Content="test3"
+                                HorizontalAlignment="Center" />
+                        <Button Content="test4"
+                                Height="200" />
+                        <Button Content="test5" 
+                                VerticalAlignment="Bottom"/>
+                        <Button Content="test6" />
+                    </qkit:UniformWrapGrid>
                 </StackPanel>
             </qkit:MasterDetailsView.DetailsView>
         </qkit:MasterDetailsView>
