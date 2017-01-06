@@ -27,7 +27,10 @@ namespace QKit.Controls
         #region Methods
         private int GetDesiredColumnCount(Size size)
         {
-            return ColumnMinWidth == 0 ? 1 : (int)Math.Floor(size.Width / ColumnMinWidth);
+            if (ColumnMinWidth == 0 || size.Width < ColumnMinWidth)
+                return 1;
+
+            return (int)Math.Floor(size.Width / ColumnMinWidth);
         }
 
         protected override Size MeasureOverride(Size availableSize)
