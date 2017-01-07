@@ -12,6 +12,7 @@
       xmlns:interactivity="using:Microsoft.Xaml.Interactivity"
       xmlns:core="using:Microsoft.Xaml.Interactions.Core"
       xmlns:behaviors="using:Template10.Behaviors"
+      xmlns:ext="using:QKit.Extensions"
       mc:Ignorable="d">
     <Page.Resources>
     </Page.Resources>
@@ -94,7 +95,7 @@
             <qkit:MasterDetailsView.DetailsView>
                 <StackPanel>
                     <qkit:NavigationMenuMainButton />
-                    <qkit:UniformWrapGrid ColumnMinWidth="100">
+                    <!--<qkit:UniformWrapGrid ColumnMinWidth="100">
                         <qkit:UniformWrapGrid.ChildrenTransitions>
                             <TransitionCollection>
                                 <RepositionThemeTransition />
@@ -112,7 +113,11 @@
                         <Button Content="test5" 
                                 VerticalAlignment="Bottom"/>
                         <Button Content="test6" />
-                    </qkit:UniformWrapGrid>
+                    </qkit:UniformWrapGrid>-->
+                    <AutoSuggestBox Visibility="{x:Bind ViewModel.Visibility, Mode=OneWay}"
+                                    ext:ControlExtensions.FocusWhenMadeVisible="True" />
+                    <Button Content="Toggle"
+                            Click="{x:Bind ViewModel.Toggle_Click}" />
                 </StackPanel>
             </qkit:MasterDetailsView.DetailsView>
         </qkit:MasterDetailsView>

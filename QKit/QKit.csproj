@@ -110,6 +110,7 @@
     <None Include="project.json" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Extensions\ControlExtensions.cs" />
     <Compile Include="Controls\MasterDetailsView.cs" />
     <Compile Include="Controls\NavigationMenuItem.cs" />
     <Compile Include="Controls\NavigationMenuMainButton.cs" />
