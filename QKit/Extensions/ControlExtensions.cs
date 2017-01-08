@@ -1,5 +1,4 @@
-﻿using System.Threading.Tasks;
-using Windows.UI.Xaml;
+﻿using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 
 namespace QKit.Extensions
@@ -48,7 +47,10 @@ namespace QKit.Extensions
             var token = GetFocusWhenMadeVisibleCallbackToken(control);
 
             if (token.HasValue)
+            {
                 control.UnregisterPropertyChangedCallback(UIElement.VisibilityProperty, token.Value);
+                SetFocusWhenMadeVisibleCallbackToken(control, null);
+            }
 
             if ((bool)e.NewValue)
             {
