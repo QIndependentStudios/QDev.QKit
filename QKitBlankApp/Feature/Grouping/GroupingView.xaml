@@ -1,0 +1,30 @@
+﻿<Page x:Class="QKitBlankApp.Feature.Grouping.GroupingView"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:local="using:QKitBlankApp.Feature.Grouping"
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+      mc:Ignorable="d">
+    <Page.DataContext>
+        <local:GroupingViewModel x:Name="ViewModel" />
+    </Page.DataContext>
+
+    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+        <SemanticZoom Grid.Row="1">
+            <SemanticZoom.ZoomedInView>
+                <ListView ItemsSource="{x:Bind ViewModel.ViewSource.View}">
+                    <ListView.GroupStyle>
+                        <GroupStyle HidesIfEmpty="True"
+                                    HeaderTemplateSelector="{StaticResource GroupHeaderTemplateSelector}">
+                        </GroupStyle>
+                    </ListView.GroupStyle>
+                </ListView>
+            </SemanticZoom.ZoomedInView>
+            <SemanticZoom.ZoomedOutView>
+                <GridView Style="{ThemeResource AlphaZoomedOutGridViewStyle}"
+                          ItemsSource="{x:Bind ViewModel.ViewSource.View.CollectionGroups}"
+                          ItemTemplateSelector="{ThemeResource ZoomedOutItemTemplateSelector}" />
+            </SemanticZoom.ZoomedOutView>
+        </SemanticZoom>
+    </Grid>
+</Page>
