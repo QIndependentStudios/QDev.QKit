@@ -117,12 +117,9 @@
     <Compile Include="Controls\NavigationMenuMainButton.cs" />
     <Compile Include="Controls\NavigationMenuView.cs" />
     <Compile Include="Controls\UniformFillGrid.cs" />
-    <Compile Include="Grouping\AlphaKeyGroup.cs" />
-    <Compile Include="Grouping\GenericKeyGroup.cs" />
-    <Compile Include="Grouping\GlyphKeyGroup.cs" />
     <Compile Include="Grouping\GroupedListHelper.cs" />
     <Compile Include="Grouping\IKeyedGroup.cs" />
-    <Compile Include="Grouping\KeyedCollectionGroup.cs" />
+    <Compile Include="Grouping\KeyedListGroup.cs" />
     <Compile Include="Grouping\KeyedGroupType.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Selectors\GroupDataTemplateSelector.cs" />

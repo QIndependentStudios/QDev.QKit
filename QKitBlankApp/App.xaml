@@ -1,8 +1,14 @@
-﻿<Application
-    x:Class="QKitBlankApp.App"
-    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:local="using:QKitBlankApp"
-    RequestedTheme="Light">
-
+﻿<Application x:Class="QKitBlankApp.App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:local="using:QKitBlankApp"
+             xmlns:styles="using:QKitBlankApp.Styles">
+    <Application.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="Styles\SemanticZoom.xaml" />
+                <styles:DataTemplates />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Application.Resources>
 </Application>
