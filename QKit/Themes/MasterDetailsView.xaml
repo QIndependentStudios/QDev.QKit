@@ -24,6 +24,8 @@
                 Value="{StaticResource MasterDetailsNormalMinWidth}" />
         <Setter Property="MasterPaneWidth"
                 Value="{StaticResource MasterPaneWidth}" />
+        <Setter Property="IsAnimated"
+                Value="True" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="controls:MasterDetailsView">

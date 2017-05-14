@@ -2,13 +2,13 @@
 <package>
   <metadata>
     <id>QKit</id>
-    <version>0.3.3</version>
+    <version>0.3.4</version>
     <authors>Q</authors>
     <owners>Q</owners>
     <!--<iconUrl>http://ICON_URL_HERE_OR_DELETE_THIS_LINE</iconUrl>-->
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>A UWP class library containing useful controls and utilities for app development.</description>
-    <releaseNotes>New ScrollToSelectedItem attached property and bug fixes.</releaseNotes>
+    <releaseNotes>Added ability to enable or disable animations when MasterDetailsView transitions.</releaseNotes>
     <copyright></copyright>
     <tags>UWP UWA XAML Windows10</tags>
     <dependencies>

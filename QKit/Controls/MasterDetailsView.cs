@@ -81,6 +81,12 @@ namespace QKit.Controls
             typeof(bool),
             typeof(MasterDetailsView),
             new PropertyMetadata(default(bool)));
+
+        public static readonly DependencyProperty IsAnimatedProperty = DependencyProperty.Register(
+            nameof(IsAnimated),
+            typeof(bool),
+            typeof(MasterDetailsView),
+            new PropertyMetadata(true));
         #endregion
 
         #region Template Parts
@@ -142,6 +148,12 @@ namespace QKit.Controls
             get { return (bool)GetValue(CanExitDetailsViewProperty); }
             private set { SetValue(CanExitDetailsViewProperty, value); }
 
+        }
+
+        public bool IsAnimated
+        {
+            get { return (bool)GetValue(IsAnimatedProperty); }
+            set { SetValue(IsAnimatedProperty, value); }
         }
         #endregion
 
@@ -211,8 +223,13 @@ namespace QKit.Controls
                 AdaptiveVisualStateGroup.CurrentState == NarrowVisualState)
             {
                 if (IsDetailsViewInStackedMode)
-                {// master -> details
+                {
+                    // master -> details
                     DetailDrillIn.Begin();
+
+                    if (!IsAnimated)
+                        DetailDrillIn.SkipToFill();
+
                     SetHitTestVisibility(MasterPresenter, false);
                     SetHitTestVisibility(DetailsPresenter, true);
                 }
@@ -220,6 +237,10 @@ namespace QKit.Controls
                 {
                     // details -> master
                     DetailDrillOut.Begin();
+
+                    if (!IsAnimated)
+                        DetailDrillOut.SkipToFill();
+
                     SetHitTestVisibility(MasterPresenter, true);
                     SetHitTestVisibility(DetailsPresenter, false);
                 }
