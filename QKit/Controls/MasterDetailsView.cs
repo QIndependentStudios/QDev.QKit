@@ -5,6 +5,7 @@ using Windows.UI.Xaml.Media.Animation;
 
 namespace QKit.Controls
 {
+    [TemplatePart(Name = ControlRootName, Type = typeof(Control))]
     [TemplatePart(Name = MasterPresenterName, Type = typeof(ContentPresenter))]
     [TemplatePart(Name = DetailsPresenterName, Type = typeof(ContentPresenter))]
     [TemplateVisualState(Name = NormalVisualStateName, GroupName = AdaptiveVisualStateGroupName)]
@@ -18,13 +19,14 @@ namespace QKit.Controls
         #endregion
 
         #region Constants
+        public const string ControlRootName = "ControlRoot";
         public const string MasterPresenterName = "MasterPresenter";
         public const string DetailsPresenterName = "DetailsPresenter";
         public const string AdaptiveVisualStateGroupName = "AdaptiveVisualStateGroup";
         public const string NormalVisualStateName = "NormalVisualState";
         public const string NarrowVisualStateName = "NarrowVisualState";
-        public const string DetailsDrillInAnimationName = "DetailsDrillIn";
-        public const string DetailsDrillOutAnimationName = "DetailsDrillOut";
+        public const string EnterDetailsViewAnimationName = "EnterDetailsViewAnimation";
+        public const string ExitDetailsViewAnimationName = "ExitDetailsViewAnimation";
         #endregion
 
         #region DependencyProperties
@@ -90,6 +92,7 @@ namespace QKit.Controls
         #endregion
 
         #region Template Parts
+        private Control ControlRoot { get; set; }
         private ContentPresenter MasterPresenter { get; set; }
         private ContentPresenter DetailsPresenter { get; set; }
 
@@ -97,8 +100,11 @@ namespace QKit.Controls
         private VisualState NormalVisualState { get; set; }
         private VisualState NarrowVisualState { get; set; }
 
-        private Storyboard DetailDrillIn { get; set; }
-        private Storyboard DetailDrillOut { get; set; }
+        private Storyboard EnterDetailsViewAnimationFallback { get; set; }
+        private Storyboard ExitDetailsViewAnimationFallback { get; set; }
+
+        private Storyboard EnterDetailsViewAnimation { get; set; }
+        private Storyboard ExitDetailsViewAnimation { get; set; }
         #endregion
 
         #region Members
@@ -165,13 +171,30 @@ namespace QKit.Controls
         #endregion
 
         #region Methods
+        private static Storyboard CreateFallbackAnimation(DependencyObject entranceTarget, DependencyObject exitTarget)
+        {
+            var sb = new Storyboard();
+            var fadeIn = new FadeInThemeAnimation();
+            var fadeOut = new FadeOutThemeAnimation();
+
+            Storyboard.SetTarget(fadeIn, entranceTarget);
+            Storyboard.SetTarget(fadeOut, exitTarget);
+            sb.Children.Add(fadeIn);
+            sb.Children.Add(fadeOut);
+            return sb;
+        }
+
         protected override void OnApplyTemplate()
         {
             // Controls
+            ControlRoot = GetTemplateChild(ControlRootName) as Control;
             MasterPresenter = GetTemplateChild(MasterPresenterName) as ContentPresenter;
             DetailsPresenter = GetTemplateChild(DetailsPresenterName) as ContentPresenter;
 
             // Visual States
+            if (AdaptiveVisualStateGroup != null)
+                AdaptiveVisualStateGroup.CurrentStateChanged -= AdaptiveVisualStateGroupElement_CurrentStateChanged;
+
             AdaptiveVisualStateGroup = GetTemplateChild(AdaptiveVisualStateGroupName) as VisualStateGroup;
             NormalVisualState = GetTemplateChild(NormalVisualStateName) as VisualState;
             NarrowVisualState = GetTemplateChild(NarrowVisualStateName) as VisualState;
@@ -180,8 +203,13 @@ namespace QKit.Controls
                 AdaptiveVisualStateGroup.CurrentStateChanged += AdaptiveVisualStateGroupElement_CurrentStateChanged;
 
             // Animations
-            DetailDrillIn = GetTemplateChild(DetailsDrillInAnimationName) as Storyboard;
-            DetailDrillOut = GetTemplateChild(DetailsDrillOutAnimationName) as Storyboard;
+            EnterDetailsViewAnimationFallback = CreateFallbackAnimation(DetailsPresenter, MasterPresenter);
+            ExitDetailsViewAnimationFallback = CreateFallbackAnimation(MasterPresenter, DetailsPresenter);
+
+            EnterDetailsViewAnimation = (GetTemplateChild(EnterDetailsViewAnimationName) as Storyboard) 
+                ?? EnterDetailsViewAnimationFallback;
+            ExitDetailsViewAnimation = (GetTemplateChild(ExitDetailsViewAnimationName) as Storyboard)
+                ?? ExitDetailsViewAnimationFallback;
         }
 
         private void UpdateViewState()
@@ -192,19 +220,13 @@ namespace QKit.Controls
             {
                 if (IsDetailsViewInStackedMode)
                 {
-                    // normal -> master
-                    DetailDrillIn.Begin();
-                    DetailDrillIn.SkipToFill();
-                    SetHitTestVisibility(MasterPresenter, false);
-                    SetHitTestVisibility(DetailsPresenter, true);
+                    // normal -> details
+                    SnapToDetailsView();
                 }
                 else
                 {
                     // normal -> details
-                    DetailDrillOut.Begin();
-                    DetailDrillOut.SkipToFill();
-                    SetHitTestVisibility(MasterPresenter, true);
-                    SetHitTestVisibility(DetailsPresenter, false);
+                    SnapToMasterView();
                 }
 
                 UpdateReadonlyStateProperties();
@@ -225,24 +247,18 @@ namespace QKit.Controls
                 if (IsDetailsViewInStackedMode)
                 {
                     // master -> details
-                    DetailDrillIn.Begin();
-
-                    if (!IsAnimated)
-                        DetailDrillIn.SkipToFill();
-
-                    SetHitTestVisibility(MasterPresenter, false);
-                    SetHitTestVisibility(DetailsPresenter, true);
+                    if (IsAnimated && EnterDetailsViewAnimation != null)
+                        AnimateToDetailsView();
+                    else
+                        SnapToDetailsView();
                 }
                 else
                 {
                     // details -> master
-                    DetailDrillOut.Begin();
-
-                    if (!IsAnimated)
-                        DetailDrillOut.SkipToFill();
-
-                    SetHitTestVisibility(MasterPresenter, true);
-                    SetHitTestVisibility(DetailsPresenter, false);
+                    if (IsAnimated && ExitDetailsViewAnimation != null)
+                        AnimateToMasterView();
+                    else
+                        SnapToMasterView();
                 }
 
                 UpdateReadonlyStateProperties();
@@ -274,11 +290,37 @@ namespace QKit.Controls
 
         private void ResetViewForNormal()
         {
-            DetailDrillIn?.Stop();
-            DetailDrillOut?.Stop();
+            EnterDetailsViewAnimation?.Stop();
+            ExitDetailsViewAnimation?.Stop();
 
             SetHitTestVisibility(MasterPresenter, true);
             SetHitTestVisibility(DetailsPresenter, true);
+        }
+
+        private void AnimateToMasterView()
+        {
+            ExitDetailsViewAnimation.Begin();
+            SetHitTestVisibility(MasterPresenter, true);
+            SetHitTestVisibility(DetailsPresenter, false);
+        }
+
+        private void AnimateToDetailsView()
+        {
+            EnterDetailsViewAnimation.Begin();
+            SetHitTestVisibility(MasterPresenter, false);
+            SetHitTestVisibility(DetailsPresenter, true);
+        }
+
+        private void SnapToMasterView()
+        {
+            AnimateToMasterView();
+            ExitDetailsViewAnimation.SkipToFill();
+        }
+
+        private void SnapToDetailsView()
+        {
+            AnimateToDetailsView();
+            EnterDetailsViewAnimation.SkipToFill();
         }
 
         private void SetHitTestVisibility(FrameworkElement element, bool isHitTestVisible)

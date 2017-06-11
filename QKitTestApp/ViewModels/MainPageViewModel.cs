@@ -24,17 +24,6 @@ namespace QKitTestApp.ViewModels
         {
             Visibility = Visibility == Visibility.Visible ? Visibility.Collapsed : Visibility.Visible;
         }
-
-        public void MasterDetails_ViewStateChanged(object sender, Windows.UI.Xaml.RoutedEventArgs e)
-        {
-            var masterDetails = sender as MasterDetailsView;
-
-            if (masterDetails == null)
-                return;
-
-            App.Current.ForceShowShellBackButton = masterDetails.CanExitDetailsView;
-            Template10.Common.BootStrapper.Current.UpdateShellBackButton();
-        }
     }
 }
 

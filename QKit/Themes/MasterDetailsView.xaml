@@ -34,11 +34,11 @@
                             BorderBrush="{TemplateBinding BorderBrush}"
                             BorderThickness="{TemplateBinding BorderThickness}">
                         <Border.Resources>
-                            <Storyboard x:Name="DetailsDrillIn">
+                            <Storyboard x:Name="EnterDetailsViewAnimation">
                                 <DrillInThemeAnimation EntranceTargetName="DetailsPresenter"
                                                        ExitTargetName="MasterPresenter" />
                             </Storyboard>
-                            <Storyboard x:Name="DetailsDrillOut">
+                            <Storyboard x:Name="ExitDetailsViewAnimation">
                                 <DrillOutThemeAnimation EntranceTargetName="MasterPresenter"
                                                         ExitTargetName="DetailsPresenter" />
                             </Storyboard>
