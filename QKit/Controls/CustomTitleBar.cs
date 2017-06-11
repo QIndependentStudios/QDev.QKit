@@ -26,6 +26,8 @@ namespace QKit.Controls
         public const string InactiveBackgroundBrushPresenterName = "InactiveBackgroundBrushPresenter";
         public const string XamlBackButtonName = "XamlBackButton";
 
+        private bool IsBackButtonNeeded = AnalyticsInfo.VersionInfo.DeviceFamily == "Windows.IoT";
+
         private FrameworkElement BackgroundBrushPresenter;
         private FrameworkElement InactiveBackgroundBrushPresenter;
         private ButtonBase XamlBackButton;
@@ -98,8 +100,11 @@ namespace QKit.Controls
             ApplicationView.GetForCurrentView().TitleBar.ButtonBackgroundColor = Colors.Transparent;
             ApplicationView.GetForCurrentView().TitleBar.ButtonInactiveBackgroundColor = Colors.Transparent;
 
-            if (AnalyticsInfo.VersionInfo.DeviceFamily == "Windows.IoT")
+            if (IsBackButtonNeeded)
+            {
                 XamlBackButtonVisibility = Visibility.Visible;
+                LeftInsetWidth = 48;
+            }
         }
         #endregion
 
