@@ -3,5 +3,6 @@
     <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="ms-appx:///QKit/Themes/MasterDetailsView.xaml" />
         <ResourceDictionary Source="ms-appx:///QKit/Themes/NavigationMenuView.xaml" />
+        <ResourceDictionary Source="ms-appx:///QKit/Themes/CustomTitleBar.xaml" />
     </ResourceDictionary.MergedDictionaries>
 </ResourceDictionary>

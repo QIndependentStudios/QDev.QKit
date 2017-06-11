@@ -7,9 +7,18 @@
       xmlns:q="using:QKit.Controls"
       mc:Ignorable="d">
 
-    <StackPanel Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-        <Button x:Name="GroupTestButton"
-                Content="Grouping Test"
-                Click="GroupTestButton_Click" />
-    </StackPanel>
+    <Grid>
+        <RelativePanel x:Name="RootPanel" />
+        <StackPanel>
+            <q:CustomTitleBar x:Name="CustomTitle"
+                              Content="QKitBlankApp"
+                              BackRequested="CustomTitle_BackRequested"/>
+            <Button x:Name="GroupTestButton"
+                    Content="Grouping Test"
+                    Click="GroupTestButton_Click" />
+            <ToggleButton x:Name="BackButtonToggle"
+                          Content="Toggle back button"
+                          Click="BackButtonToggle_Checked" />
+        </StackPanel>
+    </Grid>
 </Page>
