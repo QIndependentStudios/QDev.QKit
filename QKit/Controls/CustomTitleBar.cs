@@ -26,7 +26,8 @@ namespace QKit.Controls
         public const string InactiveBackgroundBrushPresenterName = "InactiveBackgroundBrushPresenter";
         public const string XamlBackButtonName = "XamlBackButton";
 
-        private bool IsBackButtonNeeded = AnalyticsInfo.VersionInfo.DeviceFamily == "Windows.IoT";
+        private readonly bool _isBackButtonNeeded = AnalyticsInfo.VersionInfo.DeviceFamily == "Windows.IoT";
+        private long _frameCanGoBackPropertyChangedToken;
 
         private FrameworkElement BackgroundBrushPresenter;
         private FrameworkElement InactiveBackgroundBrushPresenter;
@@ -80,7 +81,7 @@ namespace QKit.Controls
             nameof(NavigationFrame),
             typeof(Frame),
             typeof(CustomTitleBar),
-            new PropertyMetadata(null));
+            new PropertyMetadata(null, NavigationFrame_PropertyChanged));
         #endregion
 
         #region Constructors
@@ -99,12 +100,6 @@ namespace QKit.Controls
             CoreApplication.GetCurrentView().TitleBar.ExtendViewIntoTitleBar = true;
             ApplicationView.GetForCurrentView().TitleBar.ButtonBackgroundColor = Colors.Transparent;
             ApplicationView.GetForCurrentView().TitleBar.ButtonInactiveBackgroundColor = Colors.Transparent;
-
-            if (IsBackButtonNeeded)
-            {
-                XamlBackButtonVisibility = Visibility.Visible;
-                LeftInsetWidth = 48;
-            }
         }
         #endregion
 
@@ -187,6 +182,20 @@ namespace QKit.Controls
             }
         }
 
+        private void UpdateXamlBackButtonVisibility()
+        {
+            if (NavigationFrame != null && NavigationFrame.CanGoBack)
+            {
+                XamlBackButtonVisibility = Visibility.Visible;
+                LeftInsetWidth = 48;
+            }
+            else
+            {
+                XamlBackButtonVisibility = Visibility.Collapsed;
+                LeftInsetWidth = 0;
+            }
+        }
+
         protected void OnBackRequested()
         {
             BackRequested?.Invoke(this, new EventArgs());
@@ -194,6 +203,23 @@ namespace QKit.Controls
         #endregion
 
         #region Event Handlers
+        private static void NavigationFrame_PropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            var control = d as CustomTitleBar;
+            if (control == null || !control._isBackButtonNeeded)
+                return;
+
+            if (e.OldValue is Frame oldFrame)
+                oldFrame.UnregisterPropertyChangedCallback(Frame.CanGoBackProperty, control._frameCanGoBackPropertyChangedToken);
+
+            var newFrame = e.NewValue as Frame;
+            if (newFrame == null)
+                return;
+
+            control._frameCanGoBackPropertyChangedToken =
+                newFrame.RegisterPropertyChangedCallback(Frame.CanGoBackProperty, control.FrameCanGoBack_PropertyChanged);
+        }
+
         private void TitleBar_LayoutMetricsChanged(CoreApplicationViewTitleBar sender, object args)
         {
             MinHeight = sender.Height;
@@ -227,6 +253,11 @@ namespace QKit.Controls
                 OnBackRequested();
             else if (NavigationFrame.CanGoBack)
                 NavigationFrame.GoBack();
+        }
+
+        private void FrameCanGoBack_PropertyChanged(DependencyObject sender, DependencyProperty dp)
+        {
+            UpdateXamlBackButtonVisibility();
         }
         #endregion
     }
