@@ -5,28 +5,19 @@ using Windows.UI.Xaml.Media.Animation;
 
 namespace QKit.Controls
 {
-    [TemplatePart(Name = ControlRootName, Type = typeof(Control))]
-    [TemplatePart(Name = MasterPresenterName, Type = typeof(ContentPresenter))]
-    [TemplatePart(Name = DetailsPresenterName, Type = typeof(ContentPresenter))]
-    [TemplateVisualState(Name = NormalVisualStateName, GroupName = AdaptiveVisualStateGroupName)]
-    [TemplateVisualState(Name = NarrowVisualStateName, GroupName = AdaptiveVisualStateGroupName)]
+    [TemplatePart(Name = CommonStatesName, Type = typeof(VisualStateGroup))]
     [ContentProperty(Name = nameof(DetailsView))]
     public sealed class MasterDetailsView : Control
     {
         #region Events
+        public delegate void ViewStateChangingEventHandler(object sender, RoutedEventArgs e);
         public delegate void ViewStateChangedEventHandler(object sender, RoutedEventArgs e);
+        public event ViewStateChangingEventHandler ViewStateChanging;
         public event ViewStateChangedEventHandler ViewStateChanged;
         #endregion
 
         #region Constants
-        public const string ControlRootName = "ControlRoot";
-        public const string MasterPresenterName = "MasterPresenter";
-        public const string DetailsPresenterName = "DetailsPresenter";
-        public const string AdaptiveVisualStateGroupName = "AdaptiveVisualStateGroup";
-        public const string NormalVisualStateName = "NormalVisualState";
-        public const string NarrowVisualStateName = "NarrowVisualState";
-        public const string EnterDetailsViewAnimationName = "EnterDetailsViewAnimation";
-        public const string ExitDetailsViewAnimationName = "ExitDetailsViewAnimation";
+        public const string CommonStatesName = "CommonStates";
         #endregion
 
         #region DependencyProperties
@@ -89,23 +80,7 @@ namespace QKit.Controls
         #endregion
 
         #region Template Parts
-        private Control ControlRoot { get; set; }
-        private ContentPresenter MasterPresenter { get; set; }
-        private ContentPresenter DetailsPresenter { get; set; }
-
-        private VisualStateGroup AdaptiveVisualStateGroup { get; set; }
-        private VisualState NormalVisualState { get; set; }
-        private VisualState NarrowVisualState { get; set; }
-
-        private Storyboard EnterDetailsViewAnimationFallback { get; set; }
-        private Storyboard ExitDetailsViewAnimationFallback { get; set; }
-
-        private Storyboard EnterDetailsViewAnimation { get; set; }
-        private Storyboard ExitDetailsViewAnimation { get; set; }
-        #endregion
-
-        #region Members
-        private VisualState _previousState;
+        private VisualStateGroup CommonStates { get; set; }
         #endregion
 
         #region Properties
@@ -183,72 +158,39 @@ namespace QKit.Controls
 
         protected override void OnApplyTemplate()
         {
-            // Controls
-            ControlRoot = GetTemplateChild(ControlRootName) as Control;
-            MasterPresenter = GetTemplateChild(MasterPresenterName) as ContentPresenter;
-            DetailsPresenter = GetTemplateChild(DetailsPresenterName) as ContentPresenter;
+            if (CommonStates != null)
+                CommonStates.CurrentStateChanged -= CommonStates_CurrentStateChanged;
 
-            // Visual States
-            //if (AdaptiveVisualStateGroup != null)
-            //    AdaptiveVisualStateGroup.CurrentStateChanged -= AdaptiveVisualStateGroupElement_CurrentStateChanged;
+            CommonStates = GetTemplateChild(CommonStatesName) as VisualStateGroup;
 
-            //AdaptiveVisualStateGroup = GetTemplateChild(AdaptiveVisualStateGroupName) as VisualStateGroup;
-            //NormalVisualState = GetTemplateChild(NormalVisualStateName) as VisualState;
-            //NarrowVisualState = GetTemplateChild(NarrowVisualStateName) as VisualState;
+            if (CommonStates != null)
+                CommonStates.CurrentStateChanged += CommonStates_CurrentStateChanged;
 
-            //if (AdaptiveVisualStateGroup != null)
-            //    AdaptiveVisualStateGroup.CurrentStateChanged += AdaptiveVisualStateGroupElement_CurrentStateChanged;
-
-            this.SizeChanged += MasterDetailsView_SizeChanged;
-
-            // Animations
-            EnterDetailsViewAnimationFallback = CreateFallbackAnimation(DetailsPresenter, MasterPresenter);
-            ExitDetailsViewAnimationFallback = CreateFallbackAnimation(MasterPresenter, DetailsPresenter);
-
-            EnterDetailsViewAnimation = (GetTemplateChild(EnterDetailsViewAnimationName) as Storyboard)
-                ?? EnterDetailsViewAnimationFallback;
-            ExitDetailsViewAnimation = (GetTemplateChild(ExitDetailsViewAnimationName) as Storyboard)
-                ?? ExitDetailsViewAnimationFallback;
-        }
-
-        private void MasterDetailsView_SizeChanged(object sender, SizeChangedEventArgs e)
-        {
-            UpdateViewState();
+            SizeChanged += MasterDetailsView_SizeChanged;
         }
 
         private void UpdateViewState()
         {
             if (ActualWidth < NormalLayoutWidthThreshold)
-            {
-                if (IsDetailsViewInStackedMode)
-                {
-                    // normal -> details
-                    //SnapToDetailsView();
-                    VisualStateManager.GoToState(this, "DetailsVisualState", false);
-                }
-                else
-                {
-                    // normal -> details
-                    //SnapToMasterView();
-                    VisualStateManager.GoToState(this, "MasterVisualState", false);
-                }
-            }
+                VisualStateManager.GoToState(this,
+                    IsDetailsViewInStackedMode ? "DetailsVisualState" : "MasterVisualState",
+                    IsAnimated);
             else
-            {
-                // master -> normal
-                // details -> normal
                 VisualStateManager.GoToState(this, "NormalVisualState", false);
-            }
 
-            UpdateReadonlyStateProperties();
-            OnViewStateChanged();
+            IsStackedMode = ActualWidth < NormalLayoutWidthThreshold;
+            CanExitDetailsView = IsDetailsViewInStackedMode && IsStackedMode;
+
+            OnViewStateChanging();
         }
 
-        private void UpdateReadonlyStateProperties()
+        private void OnViewStateChanging()
         {
-            IsStackedMode = ActualWidth < NormalLayoutWidthThreshold;
+            if (ViewStateChanging == null)
+                return;
 
-            CanExitDetailsView = IsDetailsViewInStackedMode && IsStackedMode;
+            var args = new RoutedEventArgs();
+            ViewStateChanging(this, args);
         }
 
         private void OnViewStateChanged()
@@ -262,9 +204,13 @@ namespace QKit.Controls
         #endregion
 
         #region Event Handlers
-        private void AdaptiveVisualStateGroupElement_CurrentStateChanged(object sender, VisualStateChangedEventArgs e)
+        private void CommonStates_CurrentStateChanged(object sender, VisualStateChangedEventArgs e)
         {
-            _previousState = e.OldState;
+            OnViewStateChanged();
+        }
+
+        private void MasterDetailsView_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
             UpdateViewState();
         }
         #endregion

@@ -57,9 +57,8 @@
 
         <qkit:MasterDetailsView x:Name="MasterDetails"
                                 Grid.Row="1"
-                                NormalStateMinWidth="672"
                                 IsAnimated="True"
-                                ViewStateChanged="MasterDetails_ViewStateChanged">
+                                ViewStateChanging="MasterDetails_ViewStateChanging">
             <interactivity:Interaction.Behaviors>
                 <behaviors:BackButtonBehavior Handled="{x:Bind MasterDetails.CanExitDetailsView, Mode=OneWay}">
                     <core:ChangePropertyAction TargetObject="{x:Bind MasterDetails}"

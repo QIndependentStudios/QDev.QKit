@@ -29,7 +29,7 @@ namespace QKitTestApp.Views
             ConnectedAnimationService.GetForCurrentView().GetAnimation("x").TryStart(Circle);
         }
 
-        public async void MasterDetails_ViewStateChanged(object sender, Windows.UI.Xaml.RoutedEventArgs e)
+        public async void MasterDetails_ViewStateChanging(object sender, Windows.UI.Xaml.RoutedEventArgs e)
         {
             var masterDetails = sender as MasterDetailsView;
 
