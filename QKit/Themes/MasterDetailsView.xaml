@@ -4,7 +4,7 @@
                     xmlns:triggers="using:QKit.Triggers">
 
     <x:Double x:Key="NarrowMinWidth">0</x:Double>
-    <x:Double x:Key="MasterDetailsNormalMinWidth">720</x:Double>
+    <x:Double x:Key="MasterDetailsNormalLayoutWidthThreshold">720</x:Double>
     <x:Double x:Key="MasterPaneWidth">320</x:Double>
 
     <Style TargetType="controls:MasterDetailsView">
@@ -20,8 +20,8 @@
                 Value="False" />
         <Setter Property="TabNavigation"
                 Value="Once" />
-        <Setter Property="NormalStateMinWidth"
-                Value="{StaticResource MasterDetailsNormalMinWidth}" />
+        <Setter Property="NormalLayoutWidthThreshold"
+                Value="{StaticResource MasterDetailsNormalLayoutWidthThreshold}" />
         <Setter Property="MasterPaneWidth"
                 Value="{StaticResource MasterPaneWidth}" />
         <Setter Property="IsAnimated"
@@ -33,43 +33,40 @@
                             Background="{TemplateBinding Background}"
                             BorderBrush="{TemplateBinding BorderBrush}"
                             BorderThickness="{TemplateBinding BorderThickness}">
-                        <Border.Resources>
-                            <Storyboard x:Name="EnterDetailsViewAnimation">
-                                <DrillInThemeAnimation EntranceTargetName="DetailsPresenter"
-                                                       ExitTargetName="MasterPresenter" />
-                            </Storyboard>
-                            <Storyboard x:Name="ExitDetailsViewAnimation">
-                                <DrillOutThemeAnimation EntranceTargetName="MasterPresenter"
-                                                        ExitTargetName="DetailsPresenter" />
-                            </Storyboard>
-                        </Border.Resources>
                         <VisualStateManager.VisualStateGroups>
                             <VisualStateGroup x:Name="AdaptiveVisualStateGroup">
-                                <VisualState x:Name="NormalVisualState">
-                                    <VisualState.StateTriggers>
-                                        <triggers:ControlSizeTrigger TargetElement="{Binding ElementName=ControlRoot}"
-                                                                     MinimumWidth="{Binding NormalStateMinWidth, RelativeSource={RelativeSource TemplatedParent}}" />
-                                    </VisualState.StateTriggers>
-                                    <VisualState.Setters>
-                                        <Setter Target="MasterPane.Width"
-                                                Value="{Binding MasterPaneWidth, RelativeSource={RelativeSource TemplatedParent}}" />
-                                        <Setter Target="DetailsPane.Width"
-                                                Value="*" />
-                                    </VisualState.Setters>
+                                <VisualState x:Name="NormalVisualState"/>
+                                <VisualState x:Name="MasterVisualState">
+                                    <Storyboard>
+                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="MasterPane" Storyboard.TargetProperty="Width">
+                                            <DiscreteObjectKeyFrame KeyTime="0" Value="*" />
+                                        </ObjectAnimationUsingKeyFrames>
+                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="DetailsPane" Storyboard.TargetProperty="Width">
+                                            <DiscreteObjectKeyFrame KeyTime="0" Value="0" />
+                                        </ObjectAnimationUsingKeyFrames>
+                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="DetailsPresenter" Storyboard.TargetProperty="(Grid.Column)">
+                                            <DiscreteObjectKeyFrame KeyTime="0" Value="0" />
+                                        </ObjectAnimationUsingKeyFrames>
+                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="DetailsPresenter" Storyboard.TargetProperty="IsHitTestVisible">
+                                            <DiscreteObjectKeyFrame KeyTime="0" Value="False" />
+                                        </ObjectAnimationUsingKeyFrames>
+                                    </Storyboard>
                                 </VisualState>
-                                <VisualState x:Name="NarrowVisualState">
-                                    <VisualState.StateTriggers>
-                                        <triggers:ControlSizeTrigger TargetElement="{Binding ElementName=ControlRoot}"
-                                                                     MinimumWidth="{StaticResource NarrowMinWidth}" />
-                                    </VisualState.StateTriggers>
-                                    <VisualState.Setters>
-                                        <Setter Target="MasterPane.Width"
-                                                Value="*" />
-                                        <Setter Target="DetailsPane.Width"
-                                                Value="0" />
-                                        <Setter Target="DetailsPresenter.(Grid.Column)"
-                                                Value="0" />
-                                    </VisualState.Setters>
+                                <VisualState x:Name="DetailsVisualState">
+                                    <Storyboard>
+                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="MasterPane" Storyboard.TargetProperty="Width">
+                                            <DiscreteObjectKeyFrame KeyTime="0" Value="*" />
+                                        </ObjectAnimationUsingKeyFrames>
+                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="DetailsPane" Storyboard.TargetProperty="Width">
+                                            <DiscreteObjectKeyFrame KeyTime="0" Value="0" />
+                                        </ObjectAnimationUsingKeyFrames>
+                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="DetailsPresenter" Storyboard.TargetProperty="(Grid.Column)">
+                                            <DiscreteObjectKeyFrame KeyTime="0" Value="0" />
+                                        </ObjectAnimationUsingKeyFrames>
+                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="MasterPresenter" Storyboard.TargetProperty="IsHitTestVisible">
+                                            <DiscreteObjectKeyFrame KeyTime="0" Value="False" />
+                                        </ObjectAnimationUsingKeyFrames>
+                                    </Storyboard>
                                 </VisualState>
                             </VisualStateGroup>
                         </VisualStateManager.VisualStateGroups>

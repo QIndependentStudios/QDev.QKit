@@ -30,8 +30,8 @@ namespace QKit.Controls
         #endregion
 
         #region DependencyProperties
-        public static readonly DependencyProperty NormalStateMinWidthProperty = DependencyProperty.Register(
-            nameof(NormalStateMinWidth),
+        public static readonly DependencyProperty NormalLayoutWidthThresholdProperty = DependencyProperty.Register(
+            nameof(NormalLayoutWidthThreshold),
             typeof(double),
             typeof(MasterDetailsView),
             new PropertyMetadata(default(double)));
@@ -69,12 +69,9 @@ namespace QKit.Controls
                 {
                     var control = sender as MasterDetailsView;
 
-                    if (control == null || control.AdaptiveVisualStateGroup == null)
+                    if (control == null)
                         return;
 
-                    // Not a visual state change, but still a logical state change.
-                    // ex. VisualStateNarrow/MasterView -> VisualStateNarrow/DetailsView
-                    control._previousState = control.AdaptiveVisualStateGroup.CurrentState;
                     control.UpdateViewState();
                 }));
 
@@ -112,10 +109,10 @@ namespace QKit.Controls
         #endregion
 
         #region Properties
-        public double NormalStateMinWidth
+        public double NormalLayoutWidthThreshold
         {
-            get { return (double)GetValue(NormalStateMinWidthProperty); }
-            set { SetValue(NormalStateMinWidthProperty, value); }
+            get { return (double)GetValue(NormalLayoutWidthThresholdProperty); }
+            set { SetValue(NormalLayoutWidthThresholdProperty, value); }
         }
 
         public double MasterPaneWidth
@@ -192,91 +189,66 @@ namespace QKit.Controls
             DetailsPresenter = GetTemplateChild(DetailsPresenterName) as ContentPresenter;
 
             // Visual States
-            if (AdaptiveVisualStateGroup != null)
-                AdaptiveVisualStateGroup.CurrentStateChanged -= AdaptiveVisualStateGroupElement_CurrentStateChanged;
+            //if (AdaptiveVisualStateGroup != null)
+            //    AdaptiveVisualStateGroup.CurrentStateChanged -= AdaptiveVisualStateGroupElement_CurrentStateChanged;
 
-            AdaptiveVisualStateGroup = GetTemplateChild(AdaptiveVisualStateGroupName) as VisualStateGroup;
-            NormalVisualState = GetTemplateChild(NormalVisualStateName) as VisualState;
-            NarrowVisualState = GetTemplateChild(NarrowVisualStateName) as VisualState;
+            //AdaptiveVisualStateGroup = GetTemplateChild(AdaptiveVisualStateGroupName) as VisualStateGroup;
+            //NormalVisualState = GetTemplateChild(NormalVisualStateName) as VisualState;
+            //NarrowVisualState = GetTemplateChild(NarrowVisualStateName) as VisualState;
 
-            if (AdaptiveVisualStateGroup != null)
-                AdaptiveVisualStateGroup.CurrentStateChanged += AdaptiveVisualStateGroupElement_CurrentStateChanged;
+            //if (AdaptiveVisualStateGroup != null)
+            //    AdaptiveVisualStateGroup.CurrentStateChanged += AdaptiveVisualStateGroupElement_CurrentStateChanged;
+
+            this.SizeChanged += MasterDetailsView_SizeChanged;
 
             // Animations
             EnterDetailsViewAnimationFallback = CreateFallbackAnimation(DetailsPresenter, MasterPresenter);
             ExitDetailsViewAnimationFallback = CreateFallbackAnimation(MasterPresenter, DetailsPresenter);
 
-            EnterDetailsViewAnimation = (GetTemplateChild(EnterDetailsViewAnimationName) as Storyboard) 
+            EnterDetailsViewAnimation = (GetTemplateChild(EnterDetailsViewAnimationName) as Storyboard)
                 ?? EnterDetailsViewAnimationFallback;
             ExitDetailsViewAnimation = (GetTemplateChild(ExitDetailsViewAnimationName) as Storyboard)
                 ?? ExitDetailsViewAnimationFallback;
         }
 
+        private void MasterDetailsView_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            UpdateViewState();
+        }
+
         private void UpdateViewState()
         {
-            var previousState = _previousState ?? NormalVisualState;
-            if (previousState == NormalVisualState &&
-                AdaptiveVisualStateGroup.CurrentState == NarrowVisualState)
+            if (ActualWidth < NormalLayoutWidthThreshold)
             {
                 if (IsDetailsViewInStackedMode)
                 {
                     // normal -> details
-                    SnapToDetailsView();
+                    //SnapToDetailsView();
+                    VisualStateManager.GoToState(this, "DetailsVisualState", false);
                 }
                 else
                 {
                     // normal -> details
-                    SnapToMasterView();
+                    //SnapToMasterView();
+                    VisualStateManager.GoToState(this, "MasterVisualState", false);
                 }
-
-                UpdateReadonlyStateProperties();
-                OnViewStateChanged();
             }
-            else if (previousState == NarrowVisualState &&
-                AdaptiveVisualStateGroup.CurrentState == NormalVisualState)
+            else
             {
                 // master -> normal
                 // details -> normal
-                ResetViewForNormal();
-                UpdateReadonlyStateProperties();
-                OnViewStateChanged();
-            }
-            else if (previousState == NarrowVisualState &&
-                AdaptiveVisualStateGroup.CurrentState == NarrowVisualState)
-            {
-                if (IsDetailsViewInStackedMode)
-                {
-                    // master -> details
-                    if (IsAnimated && EnterDetailsViewAnimation != null)
-                        AnimateToDetailsView();
-                    else
-                        SnapToDetailsView();
-                }
-                else
-                {
-                    // details -> master
-                    if (IsAnimated && ExitDetailsViewAnimation != null)
-                        AnimateToMasterView();
-                    else
-                        SnapToMasterView();
-                }
-
-                UpdateReadonlyStateProperties();
-                OnViewStateChanged();
+                VisualStateManager.GoToState(this, "NormalVisualState", false);
             }
 
             UpdateReadonlyStateProperties();
+            OnViewStateChanged();
         }
 
         private void UpdateReadonlyStateProperties()
         {
-            if (AdaptiveVisualStateGroup == null)
-                return;
+            IsStackedMode = ActualWidth < NormalLayoutWidthThreshold;
 
-            IsStackedMode = AdaptiveVisualStateGroup.CurrentState == NarrowVisualState;
-
-            CanExitDetailsView = IsDetailsViewInStackedMode &&
-                AdaptiveVisualStateGroup.CurrentState == NarrowVisualState;
+            CanExitDetailsView = IsDetailsViewInStackedMode && IsStackedMode;
         }
 
         private void OnViewStateChanged()
@@ -286,47 +258,6 @@ namespace QKit.Controls
 
             var args = new RoutedEventArgs();
             ViewStateChanged(this, args);
-        }
-
-        private void ResetViewForNormal()
-        {
-            EnterDetailsViewAnimation?.Stop();
-            ExitDetailsViewAnimation?.Stop();
-
-            SetHitTestVisibility(MasterPresenter, true);
-            SetHitTestVisibility(DetailsPresenter, true);
-        }
-
-        private void AnimateToMasterView()
-        {
-            ExitDetailsViewAnimation.Begin();
-            SetHitTestVisibility(MasterPresenter, true);
-            SetHitTestVisibility(DetailsPresenter, false);
-        }
-
-        private void AnimateToDetailsView()
-        {
-            EnterDetailsViewAnimation.Begin();
-            SetHitTestVisibility(MasterPresenter, false);
-            SetHitTestVisibility(DetailsPresenter, true);
-        }
-
-        private void SnapToMasterView()
-        {
-            AnimateToMasterView();
-            ExitDetailsViewAnimation.SkipToFill();
-        }
-
-        private void SnapToDetailsView()
-        {
-            AnimateToDetailsView();
-            EnterDetailsViewAnimation.SkipToFill();
-        }
-
-        private void SetHitTestVisibility(FrameworkElement element, bool isHitTestVisible)
-        {
-            if (element != null)
-                element.IsHitTestVisible = isHitTestVisible;
         }
         #endregion
 
