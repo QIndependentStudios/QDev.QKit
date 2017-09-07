@@ -2,13 +2,13 @@
 <package>
   <metadata>
     <id>QKit</id>
-    <version>0.4.3</version>
+    <version>0.5.1</version>
     <authors>Q</authors>
     <owners>Q</owners>
     <!--<iconUrl>http://ICON_URL_HERE_OR_DELETE_THIS_LINE</iconUrl>-->
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>A UWP class library containing useful controls and utilities for app development.</description>
-    <releaseNotes>Added a new custom title bar control.</releaseNotes>
+    <releaseNotes>Changed MasterDetailsView to use VisualStateManager for state changes for better re-templating support.</releaseNotes>
     <copyright></copyright>
     <tags>UWP UWA XAML Windows10</tags>
     <dependencies>

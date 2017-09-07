@@ -71,7 +71,13 @@
                                         </Storyboard>
                                     </VisualTransition>
                                 </VisualStateGroup.Transitions>
-                                <VisualState x:Name="NormalVisualState"/>
+                                <VisualState x:Name="NormalVisualState">
+                                    <Storyboard>
+                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="MasterPane" Storyboard.TargetProperty="Width">
+                                            <DiscreteObjectKeyFrame KeyTime="0" Value="{Binding MasterPaneWidth, RelativeSource={RelativeSource TemplatedParent}}" />
+                                        </ObjectAnimationUsingKeyFrames>
+                                    </Storyboard>
+                                </VisualState>
                                 <VisualState x:Name="MasterVisualState">
                                     <Storyboard>
                                         <ObjectAnimationUsingKeyFrames Storyboard.TargetName="MasterPane" Storyboard.TargetProperty="Width">
