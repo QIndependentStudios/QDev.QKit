@@ -35,36 +35,52 @@
                                     <VisualTransition From="MasterVisualState"
                                                       To="DetailsVisualState">
                                         <Storyboard>
-                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="MasterPane" Storyboard.TargetProperty="Width">
-                                                <DiscreteObjectKeyFrame KeyTime="0" Value="*" />
+                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="MasterPane"
+                                                                           Storyboard.TargetProperty="Width">
+                                                <DiscreteObjectKeyFrame KeyTime="0"
+                                                                        Value="*" />
                                             </ObjectAnimationUsingKeyFrames>
-                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="DetailsPane" Storyboard.TargetProperty="Width">
-                                                <DiscreteObjectKeyFrame KeyTime="0" Value="0" />
+                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="DetailsPane"
+                                                                           Storyboard.TargetProperty="Width">
+                                                <DiscreteObjectKeyFrame KeyTime="0"
+                                                                        Value="0" />
                                             </ObjectAnimationUsingKeyFrames>
-                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="MasterPresenter" Storyboard.TargetProperty="IsHitTestVisible">
-                                                <DiscreteObjectKeyFrame KeyTime="0" Value="False" />
+                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="MasterPresenter"
+                                                                           Storyboard.TargetProperty="IsHitTestVisible">
+                                                <DiscreteObjectKeyFrame KeyTime="0"
+                                                                        Value="False" />
                                             </ObjectAnimationUsingKeyFrames>
-                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="DetailsContentContainer" Storyboard.TargetProperty="(Grid.Column)">
-                                                <DiscreteObjectKeyFrame KeyTime="0" Value="0" />
+                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="DetailsContentContainer"
+                                                                           Storyboard.TargetProperty="(Grid.Column)">
+                                                <DiscreteObjectKeyFrame KeyTime="0"
+                                                                        Value="0" />
                                             </ObjectAnimationUsingKeyFrames>
                                             <DrillInThemeAnimation EntranceTargetName="DetailsContentContainer"
                                                                    ExitTargetName="MasterPresenter" />
                                         </Storyboard>
                                     </VisualTransition>
                                     <VisualTransition From="DetailsVisualState"
-                                                      To="MasterVisualState" >
+                                                      To="MasterVisualState">
                                         <Storyboard>
-                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="MasterPane" Storyboard.TargetProperty="Width">
-                                                <DiscreteObjectKeyFrame KeyTime="0" Value="*" />
+                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="MasterPane"
+                                                                           Storyboard.TargetProperty="Width">
+                                                <DiscreteObjectKeyFrame KeyTime="0"
+                                                                        Value="*" />
                                             </ObjectAnimationUsingKeyFrames>
-                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="DetailsPane" Storyboard.TargetProperty="Width">
-                                                <DiscreteObjectKeyFrame KeyTime="0" Value="0" />
+                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="DetailsPane"
+                                                                           Storyboard.TargetProperty="Width">
+                                                <DiscreteObjectKeyFrame KeyTime="0"
+                                                                        Value="0" />
                                             </ObjectAnimationUsingKeyFrames>
-                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="DetailsContentContainer" Storyboard.TargetProperty="IsHitTestVisible">
-                                                <DiscreteObjectKeyFrame KeyTime="0" Value="False" />
+                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="DetailsContentContainer"
+                                                                           Storyboard.TargetProperty="IsHitTestVisible">
+                                                <DiscreteObjectKeyFrame KeyTime="0"
+                                                                        Value="False" />
                                             </ObjectAnimationUsingKeyFrames>
-                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="DetailsContentContainer" Storyboard.TargetProperty="(Grid.Column)">
-                                                <DiscreteObjectKeyFrame KeyTime="0" Value="0" />
+                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="DetailsContentContainer"
+                                                                           Storyboard.TargetProperty="(Grid.Column)">
+                                                <DiscreteObjectKeyFrame KeyTime="0"
+                                                                        Value="0" />
                                             </ObjectAnimationUsingKeyFrames>
                                             <DrillOutThemeAnimation EntranceTargetName="MasterPresenter"
                                                                     ExitTargetName="DetailsContentContainer" />
@@ -73,40 +89,58 @@
                                 </VisualStateGroup.Transitions>
                                 <VisualState x:Name="FullVisualState">
                                     <Storyboard>
-                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="MasterPane" Storyboard.TargetProperty="Width">
-                                            <DiscreteObjectKeyFrame KeyTime="0" Value="{Binding MasterPaneWidth, RelativeSource={RelativeSource TemplatedParent}}" />
+                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="MasterPane"
+                                                                       Storyboard.TargetProperty="Width">
+                                            <DiscreteObjectKeyFrame KeyTime="0"
+                                                                    Value="{Binding MasterPaneWidth, RelativeSource={RelativeSource TemplatedParent}}" />
                                         </ObjectAnimationUsingKeyFrames>
                                     </Storyboard>
                                 </VisualState>
                                 <VisualState x:Name="MasterVisualState">
                                     <Storyboard>
-                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="MasterPane" Storyboard.TargetProperty="Width">
-                                            <DiscreteObjectKeyFrame KeyTime="0" Value="*" />
+                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="MasterPane"
+                                                                       Storyboard.TargetProperty="Width">
+                                            <DiscreteObjectKeyFrame KeyTime="0"
+                                                                    Value="*" />
                                         </ObjectAnimationUsingKeyFrames>
-                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="DetailsPane" Storyboard.TargetProperty="Width">
-                                            <DiscreteObjectKeyFrame KeyTime="0" Value="0" />
+                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="DetailsPane"
+                                                                       Storyboard.TargetProperty="Width">
+                                            <DiscreteObjectKeyFrame KeyTime="0"
+                                                                    Value="0" />
                                         </ObjectAnimationUsingKeyFrames>
-                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="DetailsContentContainer" Storyboard.TargetProperty="(Grid.Column)">
-                                            <DiscreteObjectKeyFrame KeyTime="0" Value="0" />
+                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="DetailsContentContainer"
+                                                                       Storyboard.TargetProperty="(Grid.Column)">
+                                            <DiscreteObjectKeyFrame KeyTime="0"
+                                                                    Value="0" />
                                         </ObjectAnimationUsingKeyFrames>
-                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="DetailsContentContainer" Storyboard.TargetProperty="Visibility">
-                                            <DiscreteObjectKeyFrame KeyTime="0" Value="Collapsed" />
+                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="DetailsContentContainer"
+                                                                       Storyboard.TargetProperty="Visibility">
+                                            <DiscreteObjectKeyFrame KeyTime="0"
+                                                                    Value="Collapsed" />
                                         </ObjectAnimationUsingKeyFrames>
                                     </Storyboard>
                                 </VisualState>
                                 <VisualState x:Name="DetailsVisualState">
                                     <Storyboard>
-                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="MasterPane" Storyboard.TargetProperty="Width">
-                                            <DiscreteObjectKeyFrame KeyTime="0" Value="*" />
+                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="MasterPane"
+                                                                       Storyboard.TargetProperty="Width">
+                                            <DiscreteObjectKeyFrame KeyTime="0"
+                                                                    Value="*" />
                                         </ObjectAnimationUsingKeyFrames>
-                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="DetailsPane" Storyboard.TargetProperty="Width">
-                                            <DiscreteObjectKeyFrame KeyTime="0" Value="0" />
+                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="DetailsPane"
+                                                                       Storyboard.TargetProperty="Width">
+                                            <DiscreteObjectKeyFrame KeyTime="0"
+                                                                    Value="0" />
                                         </ObjectAnimationUsingKeyFrames>
-                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="MasterPresenter" Storyboard.TargetProperty="Visibility">
-                                            <DiscreteObjectKeyFrame KeyTime="0" Value="Collapsed" />
+                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="MasterPresenter"
+                                                                       Storyboard.TargetProperty="Visibility">
+                                            <DiscreteObjectKeyFrame KeyTime="0"
+                                                                    Value="Collapsed" />
                                         </ObjectAnimationUsingKeyFrames>
-                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="DetailsContentContainer" Storyboard.TargetProperty="(Grid.Column)">
-                                            <DiscreteObjectKeyFrame KeyTime="0" Value="0" />
+                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="DetailsContentContainer"
+                                                                       Storyboard.TargetProperty="(Grid.Column)">
+                                            <DiscreteObjectKeyFrame KeyTime="0"
+                                                                    Value="0" />
                                         </ObjectAnimationUsingKeyFrames>
                                     </Storyboard>
                                 </VisualState>

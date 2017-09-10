@@ -1,7 +1,6 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                    xmlns:controls="using:QKit.Controls"
-                    xmlns:triggers="using:QKit.Triggers">
+                    xmlns:controls="using:QKit.Controls">
 
     <Style TargetType="controls:CustomTitleBar">
         <Setter Property="HorizontalContentAlignment"
@@ -49,7 +48,7 @@
                                 Visibility="{TemplateBinding XamlBackButtonVisibility}"
                                 VerticalAlignment="Stretch">
                             <FontIcon Glyph=""
-                                      FontSize="13.5"/>
+                                      FontSize="13.5" />
                         </Button>
                         <ContentPresenter Content="{TemplateBinding Content}"
                                           ContentTemplate="{TemplateBinding ContentTemplate}"
