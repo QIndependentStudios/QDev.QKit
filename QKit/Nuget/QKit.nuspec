@@ -2,13 +2,13 @@
 <package>
   <metadata>
     <id>QKit</id>
-    <version>0.6.2</version>
+    <version>0.6.3</version>
     <authors>Q</authors>
     <owners>Q</owners>
     <!--<iconUrl>http://ICON_URL_HERE_OR_DELETE_THIS_LINE</iconUrl>-->
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>A UWP class library containing useful controls and utilities for app development.</description>
-    <releaseNotes>MasterDetailsView API surface change.</releaseNotes>
+    <releaseNotes>Fixed CustomTitleBar inset size not set on construction.</releaseNotes>
     <copyright></copyright>
     <tags>UWP UWA XAML Windows10</tags>
     <dependencies>

@@ -9,7 +9,7 @@
 
     <Grid>
         <RelativePanel x:Name="RootPanel" />
-        <StackPanel>
+        <StackPanel x:Name="ContentPanel">
             <q:CustomTitleBar x:Name="CustomTitle"
                               Content="QKitBlankApp"
                               BackRequested="CustomTitle_BackRequested"/>

@@ -4,13 +4,19 @@
       xmlns:local="using:QKitBlankApp.Feature.Grouping"
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+      xmlns:q="using:QKit.Controls"
       mc:Ignorable="d">
     <Page.DataContext>
         <local:GroupingViewModel x:Name="ViewModel" />
     </Page.DataContext>
 
-    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-        <SemanticZoom Grid.Row="1">
+    <RelativePanel x:Name="ContentPanel" Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+        <q:CustomTitleBar x:Name="CustomTitle"
+                              Content="QKitBlankApp" />
+        <SemanticZoom RelativePanel.Below="CustomTitle"
+                      RelativePanel.AlignLeftWithPanel="True"
+                      RelativePanel.AlignRightWithPanel="True"
+                      RelativePanel.AlignBottomWithPanel="True">
             <SemanticZoom.ZoomedInView>
                 <ListView ItemsSource="{x:Bind ViewModel.ViewSource.View}">
                     <ListView.GroupStyle>
@@ -26,5 +32,5 @@
                           ItemTemplateSelector="{ThemeResource ZoomedOutItemTemplateSelector}" />
             </SemanticZoom.ZoomedOutView>
         </SemanticZoom>
-    </Grid>
+    </RelativePanel>
 </Page>

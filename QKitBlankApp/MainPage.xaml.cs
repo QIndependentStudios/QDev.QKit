@@ -29,9 +29,12 @@ namespace QKitBlankApp
     /// </summary>
     public sealed partial class MainPage : Page
     {
+        private const double ImplicitAnimationDuration = 4;
+
         public MainPage()
         {
             this.InitializeComponent();
+            ConfigureImplicitAnimations();
         }
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
@@ -73,6 +76,23 @@ namespace QKitBlankApp
         private async void CustomTitle_BackRequested(object sender, EventArgs e)
         {
             await new MessageDialog("back requested").ShowAsync();
+        }
+
+        private void ConfigureImplicitAnimations()
+        {
+            var _compositor = ElementCompositionPreview.GetElementVisual(this).Compositor;
+            var fadeOut = _compositor.CreateScalarKeyFrameAnimation();
+            fadeOut.Target = "Opacity";
+            fadeOut.InsertKeyFrame(1, 0);
+            fadeOut.Duration = TimeSpan.FromSeconds(ImplicitAnimationDuration);
+            var fadeIn = _compositor.CreateScalarKeyFrameAnimation();
+            fadeIn.Target = "Opacity";
+            fadeIn.InsertKeyFrame(0, 0);
+            fadeIn.InsertKeyFrame(1, 1);
+            fadeIn.Duration = TimeSpan.FromSeconds(ImplicitAnimationDuration);
+            
+            ElementCompositionPreview.SetImplicitHideAnimation(ContentPanel, fadeOut);
+            ElementCompositionPreview.SetImplicitShowAnimation(ContentPanel, fadeIn);
         }
     }
 }
