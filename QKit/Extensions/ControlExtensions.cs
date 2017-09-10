@@ -61,12 +61,7 @@ namespace QKit.Extensions
 
         private static void VisibilityChangedCallback(DependencyObject sender, DependencyProperty dp)
         {
-            var control = sender as Control;
-
-            if (control == null)
-                return;
-
-            if (control.Visibility == Visibility.Visible)
+            if (sender is Control control && control.Visibility == Visibility.Visible)
             {
                 var isSuccessful = control.Focus(FocusState.Programmatic);
 

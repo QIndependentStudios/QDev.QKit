@@ -212,12 +212,9 @@ namespace QKit.Controls
             if (e.OldValue is Frame oldFrame)
                 oldFrame.UnregisterPropertyChangedCallback(Frame.CanGoBackProperty, control._frameCanGoBackPropertyChangedToken);
 
-            var newFrame = e.NewValue as Frame;
-            if (newFrame == null)
-                return;
-
-            control._frameCanGoBackPropertyChangedToken =
-                newFrame.RegisterPropertyChangedCallback(Frame.CanGoBackProperty, control.FrameCanGoBack_PropertyChanged);
+            if (e.NewValue is Frame newFrame)
+                control._frameCanGoBackPropertyChangedToken =
+                    newFrame.RegisterPropertyChangedCallback(Frame.CanGoBackProperty, control.FrameCanGoBack_PropertyChanged);
         }
 
         private void TitleBar_LayoutMetricsChanged(CoreApplicationViewTitleBar sender, object args)

@@ -16,7 +16,7 @@ namespace QKitTestApp.Views
 
         private void App_BackRequested(object sender, Template10.Common.HandledEventArgs e)
         {
-            //if (MasterDetails.IsStackedMode && MasterDetails.IsDetailsViewInStackedMode)
+            //if (MasterDetails.IsStackedMode && MasterDetails.ShowDetailsInStackedMode)
             //    ConnectedAnimationService.GetForCurrentView().PrepareToAnimate("back", Circle);
         }
 
@@ -29,7 +29,7 @@ namespace QKitTestApp.Views
             ConnectedAnimationService.GetForCurrentView().GetAnimation("x").TryStart(Circle);
         }
 
-        public async void MasterDetails_ViewStateChanging(object sender, Windows.UI.Xaml.RoutedEventArgs e)
+        public async void MasterDetails_ViewStateChanging(object sender, MasterDetailsViewStateChangeEventArgs e)
         {
             var masterDetails = sender as MasterDetailsView;
 
@@ -37,14 +37,14 @@ namespace QKitTestApp.Views
                 return;
 
 
-            if (masterDetails.IsStackedMode && !masterDetails.IsDetailsViewInStackedMode && _clickedItem != null)
+            if (e.OldValue == MasterDetailsViewState.Details && e.NewValue == MasterDetailsViewState.Master && _clickedItem != null)
             {
                 ConnectedAnimationService.GetForCurrentView().PrepareToAnimate("back", Circle);
                 var animation = ConnectedAnimationService.GetForCurrentView().GetAnimation("back");
                 await MasterList.TryStartConnectedAnimationAsync(ConnectedAnimationService.GetForCurrentView().GetAnimation("back"), _clickedItem, "Circle");
             }
 
-            App.Current.ForceShowShellBackButton = masterDetails.CanExitDetailsView;
+            App.Current.ForceShowShellBackButton = e.NewValue == MasterDetailsViewState.Details;
             Template10.Common.BootStrapper.Current.UpdateShellBackButton();
         }
     }

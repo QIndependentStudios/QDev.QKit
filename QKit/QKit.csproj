@@ -113,13 +113,17 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Controls\CustomTitleBar.cs" />
+    <Compile Include="Controls\MasterDetailsViewState.cs" />
+    <Compile Include="Controls\MasterDetailsViewStateChangeEventArgs.cs" />
+    <Compile Include="Converters\MasterDetailsIsStackedModeConverter.cs" />
+    <Compile Include="Converters\MasterDetailsCanExitDetailsConverter.cs" />
+    <Compile Include="Converters\MasterDetailsSelectionModeConverter.cs" />
     <Compile Include="Extensions\ListViewExtensions.cs" />
     <Compile Include="Extensions\ControlExtensions.cs" />
     <Compile Include="Controls\MasterDetailsView.cs" />
     <Compile Include="Controls\NavigationMenuItem.cs" />
     <Compile Include="Controls\NavigationMenuMainButton.cs" />
     <Compile Include="Controls\NavigationMenuView.cs" />
-    <Compile Include="Controls\UniformFillGrid.cs" />
     <Compile Include="Grouping\GroupedListHelper.cs" />
     <Compile Include="Grouping\IKeyedGroup.cs" />
     <Compile Include="Grouping\KeyedListGroup.cs" />

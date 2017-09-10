@@ -19,8 +19,7 @@ namespace QKit.Controls
         #endregion
 
         #region Events
-        public delegate void SelectedMenuItemChangedEventHandler(object sender, RoutedEventArgs e);
-        public event SelectedMenuItemChangedEventHandler SelectedMenuItemChanged;
+        public event RoutedEventHandler SelectedMenuItemChanged;
         #endregion
 
         #region Constants
@@ -64,12 +63,8 @@ namespace QKit.Controls
             new PropertyMetadata(null,
                 (sender, args) =>
                 {
-                    var control = sender as NavigationMenuView;
-
-                    if (control == null)
-                        return;
-
-                    control.SetSplitViewContent();
+                    if (sender is NavigationMenuView control)
+                        control.SetSplitViewContent();
                 }));
 
         public static readonly DependencyProperty SelectedMenuItemProperty = DependencyProperty.Register(
@@ -85,14 +80,12 @@ namespace QKit.Controls
             new PropertyMetadata(default(double),
                 (sender, args) =>
                 {
-                    var control = sender as NavigationMenuView;
-
-                    if (control == null)
-                        return;
-
-                    foreach (var menuItem in control.PrimaryMenuItems)
+                    if (sender is NavigationMenuView control)
                     {
-                        control.SetGlyphFontSize(menuItem);
+                        foreach (var menuItem in control.PrimaryMenuItems)
+                        {
+                            control.SetGlyphFontSize(menuItem);
+                        }
                     }
                 }));
 
@@ -103,12 +96,8 @@ namespace QKit.Controls
             new PropertyMetadata(default(bool),
                 (sender, args) =>
                 {
-                    var control = sender as NavigationMenuView;
-
-                    if (control == null)
-                        return;
-
-                    control.SetSplitViewPaneIsOpen((bool)args.NewValue);
+                    if (sender is NavigationMenuView control)
+                        control.SetSplitViewPaneIsOpen((bool)args.NewValue);
                 }));
 
         public static readonly DependencyProperty NormalStateMinWidthProperty = DependencyProperty.Register(
@@ -275,8 +264,7 @@ namespace QKit.Controls
 
         private void SetGlyphFontSize(NavigationMenuItem menuItem)
         {
-            var fontIcon = menuItem.Icon as FontIcon;
-            if (fontIcon != null)
+            if (menuItem.Icon is FontIcon fontIcon)
                 fontIcon.FontSize = FontIconGlyphSize;
         }
 
@@ -332,8 +320,7 @@ namespace QKit.Controls
             if (control == null)
                 return;
 
-            var oldCollection = e.OldValue as ObservableCollection<NavigationMenuItem>;
-            if (oldCollection != null)
+            if (e.OldValue is ObservableCollection<NavigationMenuItem> oldCollection)
             {
                 oldCollection.CollectionChanged -= control.MenuItems_CollectionChanged;
 

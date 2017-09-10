@@ -49,24 +49,25 @@
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
         <controls:PageHeader x:Name="pageHeader"
-                             Content="Main Page"
+                             Content="ASDF"
                              RelativePanel.AlignLeftWithPanel="True"
                              RelativePanel.AlignRightWithPanel="True"
                              RelativePanel.AlignTopWithPanel="True">
+            <AppBarToggleButton Content="Animate"
+                                IsChecked="{Binding IsAnimated, ElementName=MasterDetails, Mode=TwoWay}"/>
         </controls:PageHeader>
 
         <qkit:MasterDetailsView x:Name="MasterDetails"
                                 Grid.Row="1"
-                                IsAnimated="True"
                                 ViewStateChanging="MasterDetails_ViewStateChanging">
             <interactivity:Interaction.Behaviors>
-                <behaviors:BackButtonBehavior Handled="{x:Bind MasterDetails.CanExitDetailsView, Mode=OneWay}">
+                <behaviors:BackButtonBehavior Handled="{x:Bind MasterDetails.ViewState, Mode=OneWay, Converter={StaticResource MasterDetailsCanExitDetailsConverter}}">
                     <core:ChangePropertyAction TargetObject="{x:Bind MasterDetails}"
-                                               PropertyName="IsDetailsViewInStackedMode"
+                                               PropertyName="ShowDetailsInStackedMode"
                                                Value="False" />
                 </behaviors:BackButtonBehavior>
             </interactivity:Interaction.Behaviors>
-            <qkit:MasterDetailsView.MasterView>
+            <qkit:MasterDetailsView.MasterContent>
                 <StackPanel>
                     <RelativePanel>
                         <qkit:NavigationMenuMainButton x:Name="MainMenuButton"
@@ -76,13 +77,13 @@
                                    RelativePanel.RightOf="MainMenuButton" />
                     </RelativePanel>
                     <ListView x:Name="MasterList"
-                              IsItemClickEnabled="True"
-                              SelectionMode="{x:Bind MasterDetails.IsStackedMode, Mode=OneWay, Converter={StaticResource MasterDetailsSelectionModeConverter}}"
+                              IsItemClickEnabled="{x:Bind MasterDetails.ViewState, Mode=OneWay, Converter={StaticResource MasterDetailsIsStackedModeConverter}}"
+                              SelectionMode="{x:Bind MasterDetails.ViewState, Mode=OneWay, Converter={StaticResource MasterDetailsSelectionModeConverter}}"
                               ItemClick="MasterList_ItemClick">
                         <interactivity:Interaction.Behaviors>
                             <core:EventTriggerBehavior EventName="ItemClick">
                                 <core:ChangePropertyAction TargetObject="{x:Bind MasterDetails}"
-                                                           PropertyName="IsDetailsViewInStackedMode"
+                                                           PropertyName="ShowDetailsInStackedMode"
                                                            Value="True" />
                             </core:EventTriggerBehavior>
                         </interactivity:Interaction.Behaviors>
@@ -105,8 +106,8 @@
                         <x:String>5</x:String>
                     </ListView>
                 </StackPanel>
-            </qkit:MasterDetailsView.MasterView>
-            <qkit:MasterDetailsView.DetailsView>
+            </qkit:MasterDetailsView.MasterContent>
+            <qkit:MasterDetailsView.DetailsContent>
                 <StackPanel>
                     <qkit:NavigationMenuMainButton />
                     <!--<qkit:UniformWrapGrid ColumnMinWidth="100">
@@ -137,7 +138,7 @@
                     <Button Content="Toggle"
                             Click="{x:Bind ViewModel.Toggle_Click}" />
                 </StackPanel>
-            </qkit:MasterDetailsView.DetailsView>
+            </qkit:MasterDetailsView.DetailsContent>
         </qkit:MasterDetailsView>
     </Grid>
 </Page>

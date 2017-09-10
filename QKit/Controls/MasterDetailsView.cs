@@ -1,31 +1,50 @@
-﻿using Windows.UI.Xaml;
+﻿using System;
+using System.Collections.Generic;
+using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Markup;
-using Windows.UI.Xaml.Media.Animation;
 
 namespace QKit.Controls
 {
     [TemplatePart(Name = CommonStatesName, Type = typeof(VisualStateGroup))]
-    [ContentProperty(Name = nameof(DetailsView))]
+    [TemplatePart(Name = FullVisualStateName, Type = typeof(VisualState))]
+    [TemplatePart(Name = MasterVisualStateName, Type = typeof(VisualState))]
+    [TemplatePart(Name = DetailsVisualStateName, Type = typeof(VisualState))]
+    [TemplatePart(Name = DetailsPresenterName, Type = typeof(ContentPresenter))]
+    [ContentProperty(Name = nameof(DetailsContent))]
     public sealed class MasterDetailsView : Control
     {
         #region Events
-        public delegate void ViewStateChangingEventHandler(object sender, RoutedEventArgs e);
-        public delegate void ViewStateChangedEventHandler(object sender, RoutedEventArgs e);
-        public event ViewStateChangingEventHandler ViewStateChanging;
-        public event ViewStateChangedEventHandler ViewStateChanged;
+        public event EventHandler<MasterDetailsViewStateChangeEventArgs> ViewStateChanging;
+        public event EventHandler<MasterDetailsViewStateChangeEventArgs> ViewStateChanged;
         #endregion
 
         #region Constants
         public const string CommonStatesName = "CommonStates";
+        private const string FullVisualStateName = "FullVisualState";
+        private const string MasterVisualStateName = "MasterVisualState";
+        private const string DetailsVisualStateName = "DetailsVisualState";
+        private const string DetailsPresenterName = "DetailsPresenter";
+
+        private static Dictionary<string, MasterDetailsViewState> VisualStateNameEnumDictionary = new Dictionary<string, MasterDetailsViewState>
+        {
+            { FullVisualStateName, MasterDetailsViewState.Full },
+            { MasterVisualStateName, MasterDetailsViewState.Master },
+            { DetailsVisualStateName, MasterDetailsViewState.Details },
+        };
         #endregion
 
         #region DependencyProperties
-        public static readonly DependencyProperty NormalLayoutWidthThresholdProperty = DependencyProperty.Register(
-            nameof(NormalLayoutWidthThreshold),
+        public static readonly DependencyProperty StackedWidthThresholdProperty = DependencyProperty.Register(
+            nameof(StackedWidthThreshold),
             typeof(double),
             typeof(MasterDetailsView),
-            new PropertyMetadata(default(double)));
+            new PropertyMetadata(default(double),
+                (sender, args) =>
+                {
+                    if (sender is MasterDetailsView control)
+                        control.UpdateVisualState();
+                }));
 
         public static readonly DependencyProperty MasterPaneWidthProperty = DependencyProperty.Register(
             nameof(MasterPaneWidth),
@@ -33,44 +52,58 @@ namespace QKit.Controls
             typeof(MasterDetailsView),
             new PropertyMetadata(default(double)));
 
-        public static readonly DependencyProperty MasterViewProperty = DependencyProperty.Register(
-            nameof(MasterView),
+        public static readonly DependencyProperty MasterContentProperty = DependencyProperty.Register(
+            nameof(MasterContent),
             typeof(object),
             typeof(MasterDetailsView),
             new PropertyMetadata(default(object)));
 
-        public static readonly DependencyProperty DetailsViewProperty = DependencyProperty.Register(
-            nameof(DetailsView),
+        public static readonly DependencyProperty DetailsContentProperty = DependencyProperty.Register(
+            nameof(DetailsContent),
             typeof(object),
             typeof(MasterDetailsView),
             new PropertyMetadata(default(object)));
 
-        public static readonly DependencyProperty IsStackedModeProperty = DependencyProperty.Register(
-            nameof(IsStackedMode),
-            typeof(bool),
+        public static readonly DependencyProperty MasterContentTemplateProperty = DependencyProperty.Register(
+            nameof(MasterContentTemplate),
+            typeof(DataTemplate),
             typeof(MasterDetailsView),
-            new PropertyMetadata(default(bool)));
+            new PropertyMetadata(default(DataTemplate)));
 
-        public static readonly DependencyProperty IsDetailsViewInStackedModeProperty = DependencyProperty.Register(
-            nameof(IsDetailsViewInStackedMode),
+        public static readonly DependencyProperty DetailsContentTemplateProperty = DependencyProperty.Register(
+            nameof(DetailsContentTemplate),
+            typeof(DataTemplate),
+            typeof(MasterDetailsView),
+            new PropertyMetadata(default(DataTemplate)));
+
+        public static readonly DependencyProperty MasterContentTemplateSelectorProperty = DependencyProperty.Register(
+            nameof(MasterContentTemplateSelector),
+            typeof(DataTemplateSelector),
+            typeof(MasterDetailsView),
+            new PropertyMetadata(default(DataTemplateSelector)));
+
+        public static readonly DependencyProperty DetailsContentTemplateSelectorProperty = DependencyProperty.Register(
+            nameof(DetailsContentTemplateSelector),
+            typeof(DataTemplate),
+            typeof(MasterDetailsView),
+            new PropertyMetadata(default(DataTemplateSelector)));
+
+        public static readonly DependencyProperty ViewStateProperty = DependencyProperty.Register(
+            nameof(ViewState),
+            typeof(MasterDetailsViewState),
+            typeof(MasterDetailsView),
+            new PropertyMetadata(MasterDetailsViewState.Full));
+
+        public static readonly DependencyProperty ShowDetailsInStackedModeProperty = DependencyProperty.Register(
+            nameof(ShowDetailsInStackedMode),
             typeof(bool),
             typeof(MasterDetailsView),
             new PropertyMetadata(default(bool),
                 (sender, args) =>
                 {
-                    var control = sender as MasterDetailsView;
-
-                    if (control == null)
-                        return;
-
-                    control.UpdateViewState();
+                    if (sender is MasterDetailsView control)
+                        control.UpdateVisualState();
                 }));
-
-        public static readonly DependencyProperty CanExitDetailsViewProperty = DependencyProperty.Register(
-            nameof(CanExitDetailsView),
-            typeof(bool),
-            typeof(MasterDetailsView),
-            new PropertyMetadata(default(bool)));
 
         public static readonly DependencyProperty IsAnimatedProperty = DependencyProperty.Register(
             nameof(IsAnimated),
@@ -84,10 +117,10 @@ namespace QKit.Controls
         #endregion
 
         #region Properties
-        public double NormalLayoutWidthThreshold
+        public double StackedWidthThreshold
         {
-            get { return (double)GetValue(NormalLayoutWidthThresholdProperty); }
-            set { SetValue(NormalLayoutWidthThresholdProperty, value); }
+            get { return (double)GetValue(StackedWidthThresholdProperty); }
+            set { SetValue(StackedWidthThresholdProperty, value); }
         }
 
         public double MasterPaneWidth
@@ -96,36 +129,52 @@ namespace QKit.Controls
             set { SetValue(MasterPaneWidthProperty, value); }
         }
 
-        public object MasterView
+        public object MasterContent
         {
-            get { return GetValue(MasterViewProperty); }
-            set { SetValue(MasterViewProperty, value); }
+            get { return GetValue(MasterContentProperty); }
+            set { SetValue(MasterContentProperty, value); }
         }
 
-        public object DetailsView
+        public object DetailsContent
         {
-            get { return GetValue(DetailsViewProperty); }
-            set { SetValue(DetailsViewProperty, value); }
+            get { return GetValue(DetailsContentProperty); }
+            set { SetValue(DetailsContentProperty, value); }
         }
 
-        public bool IsStackedMode
+        public DataTemplate MasterContentTemplate
         {
-            get { return (bool)GetValue(IsStackedModeProperty); }
-            private set { SetValue(IsStackedModeProperty, value); }
-
+            get { return (DataTemplate)GetValue(MasterContentTemplateProperty); }
+            set { SetValue(MasterContentTemplateProperty, value); }
         }
 
-        public bool IsDetailsViewInStackedMode
+        public DataTemplate DetailsContentTemplate
         {
-            get { return (bool)GetValue(IsDetailsViewInStackedModeProperty); }
-            set { SetValue(IsDetailsViewInStackedModeProperty, value); }
+            get { return (DataTemplate)GetValue(DetailsContentTemplateProperty); }
+            set { SetValue(DetailsContentTemplateProperty, value); }
         }
 
-        public bool CanExitDetailsView
+        public DataTemplateSelector MasterContentTemplateSelector
         {
-            get { return (bool)GetValue(CanExitDetailsViewProperty); }
-            private set { SetValue(CanExitDetailsViewProperty, value); }
+            get { return (DataTemplateSelector)GetValue(MasterContentTemplateSelectorProperty); }
+            set { SetValue(MasterContentTemplateSelectorProperty, value); }
+        }
 
+        public DataTemplateSelector DetailsContentTemplateSelector
+        {
+            get { return (DataTemplateSelector)GetValue(DetailsContentTemplateSelectorProperty); }
+            set { SetValue(DetailsContentTemplateSelectorProperty, value); }
+        }
+
+        public MasterDetailsViewState ViewState
+        {
+            get { return (MasterDetailsViewState)GetValue(ViewStateProperty); }
+            private set { SetValue(ViewStateProperty, value); }
+        }
+
+        public bool ShowDetailsInStackedMode
+        {
+            get { return (bool)GetValue(ShowDetailsInStackedModeProperty); }
+            set { SetValue(ShowDetailsInStackedModeProperty, value); }
         }
 
         public bool IsAnimated
@@ -139,23 +188,11 @@ namespace QKit.Controls
         public MasterDetailsView()
         {
             DefaultStyleKey = typeof(MasterDetailsView);
+            SizeChanged += MasterDetailsView_SizeChanged;
         }
         #endregion
 
         #region Methods
-        private static Storyboard CreateFallbackAnimation(DependencyObject entranceTarget, DependencyObject exitTarget)
-        {
-            var sb = new Storyboard();
-            var fadeIn = new FadeInThemeAnimation();
-            var fadeOut = new FadeOutThemeAnimation();
-
-            Storyboard.SetTarget(fadeIn, entranceTarget);
-            Storyboard.SetTarget(fadeOut, exitTarget);
-            sb.Children.Add(fadeIn);
-            sb.Children.Add(fadeOut);
-            return sb;
-        }
-
         protected override void OnApplyTemplate()
         {
             if (CommonStates != null)
@@ -165,40 +202,48 @@ namespace QKit.Controls
 
             if (CommonStates != null)
                 CommonStates.CurrentStateChanged += CommonStates_CurrentStateChanged;
-
-            SizeChanged += MasterDetailsView_SizeChanged;
         }
 
-        private void UpdateViewState()
+        private void UpdateVisualState()
         {
-            if (ActualWidth < NormalLayoutWidthThreshold)
-                VisualStateManager.GoToState(this,
-                    IsDetailsViewInStackedMode ? "DetailsVisualState" : "MasterVisualState",
-                    IsAnimated);
-            else
-                VisualStateManager.GoToState(this, "NormalVisualState", false);
+            var oldViewState = ViewState;
+            var newViewState = MasterDetailsViewState.Full;
+            var newViewStateName = FullVisualStateName;
 
-            IsStackedMode = ActualWidth < NormalLayoutWidthThreshold;
-            CanExitDetailsView = IsDetailsViewInStackedMode && IsStackedMode;
+            if (ActualWidth < StackedWidthThreshold)
+            {
+                newViewStateName = ShowDetailsInStackedMode ? DetailsVisualStateName : MasterVisualStateName;
 
-            OnViewStateChanging();
+                if (VisualStateNameEnumDictionary.ContainsKey(newViewStateName))
+                    newViewState = VisualStateNameEnumDictionary[newViewStateName];
+            }
+
+            if (newViewState != MasterDetailsViewState.Master)
+                GetTemplateChild(DetailsPresenterName);
+
+            ViewState = newViewState;
+            VisualStateManager.GoToState(this,
+                newViewStateName,
+                IsAnimated && newViewState != MasterDetailsViewState.Full);
+
+            OnViewStateChanging(oldViewState, newViewState);
         }
 
-        private void OnViewStateChanging()
+        private void OnViewStateChanging(MasterDetailsViewState oldValue, MasterDetailsViewState newValue)
         {
-            if (ViewStateChanging == null)
+            if (ViewStateChanging == null || oldValue == newValue)
                 return;
 
-            var args = new RoutedEventArgs();
+            var args = new MasterDetailsViewStateChangeEventArgs(oldValue, newValue);
             ViewStateChanging(this, args);
         }
 
-        private void OnViewStateChanged()
+        private void OnViewStateChanged(MasterDetailsViewState oldValue, MasterDetailsViewState newValue)
         {
-            if (ViewStateChanged == null)
+            if (ViewStateChanged == null || oldValue == newValue)
                 return;
 
-            var args = new RoutedEventArgs();
+            var args = new MasterDetailsViewStateChangeEventArgs(oldValue, newValue);
             ViewStateChanged(this, args);
         }
         #endregion
@@ -206,12 +251,20 @@ namespace QKit.Controls
         #region Event Handlers
         private void CommonStates_CurrentStateChanged(object sender, VisualStateChangedEventArgs e)
         {
-            OnViewStateChanged();
+            var oldValue = MasterDetailsViewState.Full;
+            if (e.OldState != null && VisualStateNameEnumDictionary.ContainsKey(e.OldState.Name))
+                oldValue = VisualStateNameEnumDictionary[e.OldState.Name];
+
+            var newValue = MasterDetailsViewState.Full;
+            if (VisualStateNameEnumDictionary.ContainsKey(e.NewState.Name))
+                newValue = VisualStateNameEnumDictionary[e.NewState.Name];
+
+            OnViewStateChanged(oldValue, newValue);
         }
 
         private void MasterDetailsView_SizeChanged(object sender, SizeChangedEventArgs e)
         {
-            UpdateViewState();
+            UpdateVisualState();
         }
         #endregion
     }
