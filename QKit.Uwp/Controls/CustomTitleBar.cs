@@ -22,16 +22,18 @@ namespace QKit.Uwp.Controls
         #endregion
 
         #region Fields
-        public const string BackgroundBrushPresenterName = "BackgroundBrushPresenter";
-        public const string InactiveBackgroundBrushPresenterName = "InactiveBackgroundBrushPresenter";
-        public const string XamlBackButtonName = "XamlBackButton";
-
-        private readonly bool _isBackButtonNeeded = AnalyticsInfo.VersionInfo.DeviceFamily == "Windows.IoT";
-        private long _frameCanGoBackPropertyChangedToken;
+        protected const string BackgroundBrushPresenterName = "BackgroundBrushPresenter";
+        protected const string InactiveBackgroundBrushPresenterName = "InactiveBackgroundBrushPresenter";
+        protected const string XamlBackButtonName = "XamlBackButton";
+        protected const int DefaultLeftInsetSize = 48;
 
         private FrameworkElement BackgroundBrushPresenter;
         private FrameworkElement InactiveBackgroundBrushPresenter;
         private ButtonBase XamlBackButton;
+
+        private long _frameCanGoBackPropertyChangedToken;
+
+        protected readonly bool _isBackButtonNeeded = AnalyticsInfo.VersionInfo.DeviceFamily == "Windows.IoT";
         #endregion
 
         #region DependencyProperties
@@ -88,23 +90,7 @@ namespace QKit.Uwp.Controls
         public CustomTitleBar()
         {
             DefaultStyleKey = typeof(CustomTitleBar);
-
-            if (DesignMode.DesignModeEnabled)
-                return;
-
-            Window.Current.Activated += Current_Activated;
-            CoreApplicationViewTitleBar coreTitleBar = CoreApplication.GetCurrentView().TitleBar;
-            LeftInsetWidth = coreTitleBar.SystemOverlayLeftInset;
-            RightInsetWidth = coreTitleBar.SystemOverlayRightInset;
-
-            coreTitleBar.IsVisibleChanged += TitleBar_IsVisibleChanged;
-            coreTitleBar.LayoutMetricsChanged += TitleBar_LayoutMetricsChanged;
-
-            coreTitleBar.ExtendViewIntoTitleBar = true;
-
-            ApplicationViewTitleBar titleBar = ApplicationView.GetForCurrentView().TitleBar;
-            titleBar.ButtonBackgroundColor = Colors.Transparent;
-            titleBar.ButtonInactiveBackgroundColor = Colors.Transparent;
+            Loaded += CustomTitleBar_Loaded;
         }
         #endregion
 
@@ -156,7 +142,6 @@ namespace QKit.Uwp.Controls
             get { return (Frame)GetValue(NavigationFrameProperty); }
             set { SetValue(NavigationFrameProperty, value); }
         }
-
         #endregion
 
         #region Methods
@@ -172,7 +157,22 @@ namespace QKit.Uwp.Controls
             base.OnApplyTemplate();
         }
 
-        private void UpdateTitleBarLayout(bool isTitleBarVisible)
+        protected virtual void RegisterFrame(DependencyPropertyChangedEventArgs e)
+        {
+            if (!_isBackButtonNeeded)
+                return;
+
+            if (e.OldValue is Frame oldFrame)
+                oldFrame.UnregisterPropertyChangedCallback(Frame.CanGoBackProperty, _frameCanGoBackPropertyChangedToken);
+
+            if (e.NewValue is Frame newFrame)
+                _frameCanGoBackPropertyChangedToken =
+                    newFrame.RegisterPropertyChangedCallback(Frame.CanGoBackProperty, FrameCanGoBack_PropertyChanged);
+
+            UpdateXamlBackButtonVisibility();
+        }
+
+        protected void UpdateTitleBarLayout(bool isTitleBarVisible)
         {
             var visibility = isTitleBarVisible ? Visibility.Visible : Visibility.Collapsed;
 
@@ -187,12 +187,12 @@ namespace QKit.Uwp.Controls
             }
         }
 
-        private void UpdateXamlBackButtonVisibility()
+        protected void UpdateXamlBackButtonVisibility()
         {
             if (NavigationFrame != null && NavigationFrame.CanGoBack)
             {
                 XamlBackButtonVisibility = Visibility.Visible;
-                LeftInsetWidth = 48;
+                LeftInsetWidth = DefaultLeftInsetSize;
             }
             else
             {
@@ -211,15 +211,41 @@ namespace QKit.Uwp.Controls
         private static void NavigationFrame_PropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             var control = d as CustomTitleBar;
-            if (control == null || !control._isBackButtonNeeded)
+            if (d is CustomTitleBar titleBar)
+                titleBar.RegisterFrame(e);
+        }
+
+        private void CustomTitleBar_Loaded(object sender, RoutedEventArgs e)
+        {
+            Unloaded += CustomTitleBar_Unloaded;
+
+            if (DesignMode.DesignModeEnabled)
                 return;
 
-            if (e.OldValue is Frame oldFrame)
-                oldFrame.UnregisterPropertyChangedCallback(Frame.CanGoBackProperty, control._frameCanGoBackPropertyChangedToken);
+            Window.Current.Activated += Current_Activated;
+            var coreTitleBar = CoreApplication.GetCurrentView().TitleBar;
+            LeftInsetWidth = coreTitleBar.SystemOverlayLeftInset;
+            RightInsetWidth = coreTitleBar.SystemOverlayRightInset;
 
-            if (e.NewValue is Frame newFrame)
-                control._frameCanGoBackPropertyChangedToken =
-                    newFrame.RegisterPropertyChangedCallback(Frame.CanGoBackProperty, control.FrameCanGoBack_PropertyChanged);
+            coreTitleBar.IsVisibleChanged += TitleBar_IsVisibleChanged;
+            coreTitleBar.LayoutMetricsChanged += TitleBar_LayoutMetricsChanged;
+
+            coreTitleBar.ExtendViewIntoTitleBar = true;
+
+            ApplicationViewTitleBar titleBar = ApplicationView.GetForCurrentView().TitleBar;
+            titleBar.ButtonBackgroundColor = Colors.Transparent;
+            titleBar.ButtonInactiveBackgroundColor = Colors.Transparent;
+
+            UpdateTitleBarLayout(coreTitleBar.IsVisible);
+        }
+
+        private void CustomTitleBar_Unloaded(object sender, RoutedEventArgs e)
+        {
+            Window.Current.Activated -= Current_Activated;
+            var coreTitleBar = CoreApplication.GetCurrentView().TitleBar;
+
+            coreTitleBar.IsVisibleChanged -= TitleBar_IsVisibleChanged;
+            coreTitleBar.LayoutMetricsChanged -= TitleBar_LayoutMetricsChanged;
         }
 
         private void TitleBar_LayoutMetricsChanged(CoreApplicationViewTitleBar sender, object args)

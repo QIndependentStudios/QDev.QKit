@@ -115,6 +115,7 @@
     <Compile Include="Controls\CustomTitleBar.cs" />
     <Compile Include="Controls\MasterDetailsViewState.cs" />
     <Compile Include="Controls\MasterDetailsViewStateChangeEventArgs.cs" />
+    <Compile Include="Controls\UniformWrapGrid.cs" />
     <Compile Include="Converters\MasterDetailsIsStackedModeConverter.cs" />
     <Compile Include="Converters\MasterDetailsCanExitDetailsConverter.cs" />
     <Compile Include="Converters\MasterDetailsSelectionModeConverter.cs" />

@@ -126,12 +126,12 @@ namespace QKit.Uwp.Controls
         #endregion
 
         #region Template Parts
-        private SplitView RootSplitView { get; set; }
+        private SplitView _rootSplitView { get; set; }
 
-        private VisualStateGroup AdaptiveVisualStateGroup { get; set; }
-        private VisualState WideVisualState { get; set; }
-        private VisualState NormalVisualState { get; set; }
-        private VisualState NarrowVisualState { get; set; }
+        private VisualStateGroup _adaptiveVisualStateGroup { get; set; }
+        private VisualState _wideVisualState { get; set; }
+        private VisualState _normalVisualState { get; set; }
+        private VisualState _narrowVisualState { get; set; }
         #endregion
 
         #region Constructors
@@ -220,16 +220,25 @@ namespace QKit.Uwp.Controls
         #region Methods
         protected override void OnApplyTemplate()
         {
-            RootSplitView = GetTemplateChild(RootSplitViewName) as SplitView;
-            RootSplitView.PaneClosed += RootSplitView_PaneClosed;
+            if (_rootSplitView != null)
+                _rootSplitView.PaneClosed -= RootSplitView_PaneClosed;
 
-            AdaptiveVisualStateGroup = GetTemplateChild(AdaptiveVisualStateGroupName) as VisualStateGroup;
-            WideVisualState = GetTemplateChild(WideVisualStateName) as VisualState;
-            NormalVisualState = GetTemplateChild(NormalVisualStateName) as VisualState;
-            NarrowVisualState = GetTemplateChild(NarrowVisualStateName) as VisualState;
+            _rootSplitView = GetTemplateChild(RootSplitViewName) as SplitView;
 
-            if (AdaptiveVisualStateGroup != null)
-                AdaptiveVisualStateGroup.CurrentStateChanged += AdaptiveVisualStateGroupElement_CurrentStateChanged;
+            if (_rootSplitView != null)
+                _rootSplitView.PaneClosed += RootSplitView_PaneClosed;
+
+            if (_adaptiveVisualStateGroup != null)
+                _adaptiveVisualStateGroup.CurrentStateChanged -= AdaptiveVisualStateGroupElement_CurrentStateChanged;
+
+            _adaptiveVisualStateGroup = GetTemplateChild(AdaptiveVisualStateGroupName) as VisualStateGroup;
+
+            if (_adaptiveVisualStateGroup != null)
+                _adaptiveVisualStateGroup.CurrentStateChanged += AdaptiveVisualStateGroupElement_CurrentStateChanged;
+
+            _wideVisualState = GetTemplateChild(WideVisualStateName) as VisualState;
+            _normalVisualState = GetTemplateChild(NormalVisualStateName) as VisualState;
+            _narrowVisualState = GetTemplateChild(NarrowVisualStateName) as VisualState;
 
             UpdateSplitViewStates();
             SetSplitViewContent();
@@ -240,26 +249,24 @@ namespace QKit.Uwp.Controls
         private void UpdateSplitViewStates()
         {
             IsMenuOpen = false;
-            if (RootSplitView != null)
+            if (_rootSplitView != null)
             {
-                if (AdaptiveVisualStateGroup.CurrentState == WideVisualState)
+                if (_adaptiveVisualStateGroup.CurrentState == _wideVisualState)
                 {
-                    RootSplitView.DisplayMode = SplitViewDisplayMode.CompactInline;
+                    _rootSplitView.DisplayMode = SplitViewDisplayMode.CompactInline;
                     IsMenuOpen = true;
                 }
-                else if (AdaptiveVisualStateGroup.CurrentState == NormalVisualState)
-                    RootSplitView.DisplayMode = SplitViewDisplayMode.CompactOverlay;
+                else if (_adaptiveVisualStateGroup.CurrentState == _normalVisualState)
+                    _rootSplitView.DisplayMode = SplitViewDisplayMode.CompactOverlay;
                 else
-                    RootSplitView.DisplayMode = SplitViewDisplayMode.Overlay;
+                    _rootSplitView.DisplayMode = SplitViewDisplayMode.Overlay;
             }
         }
 
         private void SetSplitViewContent()
         {
-            if (RootSplitView == null)
-                return;
-
-            RootSplitView.Content = NavigationFrame;
+            if (_rootSplitView != null)
+                _rootSplitView.Content = NavigationFrame;
         }
 
         private void SetGlyphFontSize(NavigationMenuItem menuItem)
@@ -299,8 +306,8 @@ namespace QKit.Uwp.Controls
 
         private void SetSplitViewPaneIsOpen(bool isOpen)
         {
-            if (RootSplitView != null && RootSplitView.IsPaneOpen != isOpen)
-                RootSplitView.IsPaneOpen = isOpen;
+            if (_rootSplitView != null && _rootSplitView.IsPaneOpen != isOpen)
+                _rootSplitView.IsPaneOpen = isOpen;
         }
 
         private void OnSelectedMenuItemChanged()
@@ -368,8 +375,8 @@ namespace QKit.Uwp.Controls
         {
             SelectedMenuItem = sender as NavigationMenuItem;
 
-            if (AdaptiveVisualStateGroup != null &&
-                AdaptiveVisualStateGroup.CurrentState != WideVisualState)
+            if (_adaptiveVisualStateGroup != null &&
+                _adaptiveVisualStateGroup.CurrentState != _wideVisualState)
                 IsMenuOpen = false;
 
             OnSelectedMenuItemChanged();

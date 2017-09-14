@@ -4,7 +4,7 @@ using Windows.Foundation;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 
-namespace QKit.Controls
+namespace QKit.Uwp.Controls
 {
     public class UniformWrapGrid : Panel
     {
@@ -25,7 +25,7 @@ namespace QKit.Controls
         #endregion
 
         #region Methods
-        private int GetDesiredColumnCount(Size size)
+        protected virtual int GetDesiredColumnCount(Size size)
         {
             if (ColumnMinWidth == 0 || size.Width < ColumnMinWidth)
                 return 1;

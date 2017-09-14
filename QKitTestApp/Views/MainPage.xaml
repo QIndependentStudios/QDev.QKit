@@ -48,14 +48,6 @@
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
-        <controls:PageHeader x:Name="pageHeader"
-                             Content="ASDF"
-                             RelativePanel.AlignLeftWithPanel="True"
-                             RelativePanel.AlignRightWithPanel="True"
-                             RelativePanel.AlignTopWithPanel="True">
-            <AppBarToggleButton Content="Animate"
-                                IsChecked="{Binding IsAnimated, ElementName=MasterDetails, Mode=TwoWay}"/>
-        </controls:PageHeader>
 
         <qkit:MasterDetailsView x:Name="MasterDetails"
                                 Grid.Row="1"
@@ -69,13 +61,22 @@
             </interactivity:Interaction.Behaviors>
             <qkit:MasterDetailsView.MasterContent>
                 <StackPanel>
-                    <RelativePanel>
-                        <qkit:NavigationMenuMainButton x:Name="MainMenuButton"
+                    <controls:PageHeader x:Name="pageHeader"
+                             RelativePanel.AlignLeftWithPanel="True"
+                             RelativePanel.AlignRightWithPanel="True"
+                             RelativePanel.AlignTopWithPanel="True">
+                        <controls:PageHeader.Content>
+                            <RelativePanel Margin="-15,0,0,0">
+                                <qkit:NavigationMenuMainButton x:Name="MainMenuButton"
                                                        Margin="0,0,0,0" />
-                        <TextBlock Text="MAIN PAGE"
+                                <TextBlock Text="MAIN PAGE"
                                    RelativePanel.AlignVerticalCenterWithPanel="True"
                                    RelativePanel.RightOf="MainMenuButton" />
-                    </RelativePanel>
+                            </RelativePanel>
+                        </controls:PageHeader.Content>
+                        <AppBarToggleButton Content="Transitions"
+                                IsChecked="{Binding UseTransitions, ElementName=MasterDetails, Mode=TwoWay}"/>
+                    </controls:PageHeader>
                     <ListView x:Name="MasterList"
                               IsItemClickEnabled="{x:Bind MasterDetails.ViewState, Mode=OneWay, Converter={StaticResource MasterDetailsIsStackedModeConverter}}"
                               SelectionMode="{x:Bind MasterDetails.ViewState, Mode=OneWay, Converter={StaticResource MasterDetailsSelectionModeConverter}}"

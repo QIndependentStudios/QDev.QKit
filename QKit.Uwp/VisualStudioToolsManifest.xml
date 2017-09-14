@@ -4,6 +4,7 @@
       <Item Type="QKit.Uwp.Controls.CustomTitleBar" />
       <Item Type="QKit.Uwp.Controls.MasterDetailsView" />
       <Item Type="QKit.Uwp.Controls.NavigationMenuView" />
+      <Item Type="QKit.Uwp.Controls.UniformWrapGrid" />
     </ToolboxItems>
   </File>
 </FileList>

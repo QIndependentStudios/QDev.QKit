@@ -21,7 +21,7 @@ namespace QKit.Uwp.Controls
         #endregion
 
         #region Constants
-        public const string CommonStatesName = "CommonStates";
+        private const string CommonStatesName = "CommonStates";
         private const string FullVisualStateName = "FullVisualState";
         private const string MasterVisualStateName = "MasterVisualState";
         private const string DetailsVisualStateName = "DetailsVisualState";
@@ -107,8 +107,8 @@ namespace QKit.Uwp.Controls
                         control.UpdateVisualState();
                 }));
 
-        public static readonly DependencyProperty IsAnimatedProperty = DependencyProperty.Register(
-            nameof(IsAnimated),
+        public static readonly DependencyProperty UseTransitionsProperty = DependencyProperty.Register(
+            nameof(UseTransitions),
             typeof(bool),
             typeof(MasterDetailsView),
             new PropertyMetadata(true));
@@ -179,10 +179,10 @@ namespace QKit.Uwp.Controls
             set { SetValue(ShowDetailsInStackedModeProperty, value); }
         }
 
-        public bool IsAnimated
+        public bool UseTransitions
         {
-            get { return (bool)GetValue(IsAnimatedProperty); }
-            set { SetValue(IsAnimatedProperty, value); }
+            get { return (bool)GetValue(UseTransitionsProperty); }
+            set { SetValue(UseTransitionsProperty, value); }
         }
         #endregion
 
@@ -195,17 +195,6 @@ namespace QKit.Uwp.Controls
         #endregion
 
         #region Methods
-        protected override void OnApplyTemplate()
-        {
-            if (CommonStates != null)
-                CommonStates.CurrentStateChanged -= CommonStates_CurrentStateChanged;
-
-            CommonStates = GetTemplateChild(CommonStatesName) as VisualStateGroup;
-
-            if (CommonStates != null)
-                CommonStates.CurrentStateChanged += CommonStates_CurrentStateChanged;
-        }
-
         private void UpdateVisualState()
         {
             var oldViewState = ViewState;
@@ -229,7 +218,7 @@ namespace QKit.Uwp.Controls
             ViewState = newViewState;
             VisualStateManager.GoToState(this,
                 newViewStateName,
-                IsAnimated && newViewState != MasterDetailsViewState.Full);
+                UseTransitions && newViewState != MasterDetailsViewState.Full);
 
             OnViewStateChanging(oldViewState, newViewState);
         }
@@ -250,6 +239,17 @@ namespace QKit.Uwp.Controls
 
             var args = new MasterDetailsViewStateChangeEventArgs(oldValue, newValue);
             ViewStateChanged(this, args);
+        }
+
+        protected override void OnApplyTemplate()
+        {
+            if (CommonStates != null)
+                CommonStates.CurrentStateChanged -= CommonStates_CurrentStateChanged;
+
+            CommonStates = GetTemplateChild(CommonStatesName) as VisualStateGroup;
+
+            if (CommonStates != null)
+                CommonStates.CurrentStateChanged += CommonStates_CurrentStateChanged;
         }
         #endregion
 

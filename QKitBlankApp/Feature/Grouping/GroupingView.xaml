@@ -12,7 +12,7 @@
 
     <RelativePanel x:Name="ContentPanel" Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
         <q:CustomTitleBar x:Name="CustomTitle"
-                              Content="QKitBlankApp" />
+                          Content="QKitBlankApp" />
         <SemanticZoom RelativePanel.Below="CustomTitle"
                       RelativePanel.AlignLeftWithPanel="True"
                       RelativePanel.AlignRightWithPanel="True"

@@ -21,7 +21,7 @@
                 Value="{StaticResource MasterDetailsStackedWidthThreshold}" />
         <Setter Property="MasterPaneWidth"
                 Value="{StaticResource MasterPaneWidth}" />
-        <Setter Property="IsAnimated"
+        <Setter Property="UseTransitions"
                 Value="True" />
         <Setter Property="Template">
             <Setter.Value>
