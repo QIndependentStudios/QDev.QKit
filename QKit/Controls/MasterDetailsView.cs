@@ -10,6 +10,7 @@ namespace QKit.Controls
     [TemplatePart(Name = FullVisualStateName, Type = typeof(VisualState))]
     [TemplatePart(Name = MasterVisualStateName, Type = typeof(VisualState))]
     [TemplatePart(Name = DetailsVisualStateName, Type = typeof(VisualState))]
+    [TemplatePart(Name = MasterPresenterName, Type = typeof(ContentPresenter))]
     [TemplatePart(Name = DetailsPresenterName, Type = typeof(ContentPresenter))]
     [ContentProperty(Name = nameof(DetailsContent))]
     public sealed class MasterDetailsView : Control
@@ -24,6 +25,7 @@ namespace QKit.Controls
         private const string FullVisualStateName = "FullVisualState";
         private const string MasterVisualStateName = "MasterVisualState";
         private const string DetailsVisualStateName = "DetailsVisualState";
+        private const string MasterPresenterName = "MasterPresenter";
         private const string DetailsPresenterName = "DetailsPresenter";
 
         private static Dictionary<string, MasterDetailsViewState> VisualStateNameEnumDictionary = new Dictionary<string, MasterDetailsViewState>
@@ -217,6 +219,9 @@ namespace QKit.Controls
                 if (VisualStateNameEnumDictionary.ContainsKey(newViewStateName))
                     newViewState = VisualStateNameEnumDictionary[newViewStateName];
             }
+
+            if (newViewState != MasterDetailsViewState.Details)
+                GetTemplateChild(MasterPresenterName);
 
             if (newViewState != MasterDetailsViewState.Master)
                 GetTemplateChild(DetailsPresenterName);

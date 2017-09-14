@@ -45,7 +45,7 @@
                                                 <DiscreteObjectKeyFrame KeyTime="0"
                                                                         Value="0" />
                                             </ObjectAnimationUsingKeyFrames>
-                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="MasterPresenter"
+                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="MasterContentContainer"
                                                                            Storyboard.TargetProperty="IsHitTestVisible">
                                                 <DiscreteObjectKeyFrame KeyTime="0"
                                                                         Value="False" />
@@ -56,7 +56,7 @@
                                                                         Value="0" />
                                             </ObjectAnimationUsingKeyFrames>
                                             <DrillInThemeAnimation EntranceTargetName="DetailsContentContainer"
-                                                                   ExitTargetName="MasterPresenter" />
+                                                                   ExitTargetName="MasterContentContainer" />
                                         </Storyboard>
                                     </VisualTransition>
                                     <VisualTransition From="DetailsVisualState"
@@ -82,7 +82,7 @@
                                                 <DiscreteObjectKeyFrame KeyTime="0"
                                                                         Value="0" />
                                             </ObjectAnimationUsingKeyFrames>
-                                            <DrillOutThemeAnimation EntranceTargetName="MasterPresenter"
+                                            <DrillOutThemeAnimation EntranceTargetName="MasterContentContainer"
                                                                     ExitTargetName="DetailsContentContainer" />
                                         </Storyboard>
                                     </VisualTransition>
@@ -132,7 +132,7 @@
                                             <DiscreteObjectKeyFrame KeyTime="0"
                                                                     Value="0" />
                                         </ObjectAnimationUsingKeyFrames>
-                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="MasterPresenter"
+                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="MasterContentContainer"
                                                                        Storyboard.TargetProperty="Visibility">
                                             <DiscreteObjectKeyFrame KeyTime="0"
                                                                     Value="Collapsed" />
@@ -154,12 +154,15 @@
                                 <ColumnDefinition x:Name="DetailsPane"
                                                   Width="*" />
                             </Grid.ColumnDefinitions>
-                            <ContentPresenter x:Name="MasterPresenter"
-                                              Content="{TemplateBinding MasterContent}"
-                                              ContentTemplate="{TemplateBinding MasterContentTemplate}"
-                                              ContentTemplateSelector="{TemplateBinding MasterContentTemplateSelector}"
-                                              HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
-                                              VerticalAlignment="{TemplateBinding VerticalContentAlignment}" />
+                            <Border x:Name="MasterContentContainer">
+                                <ContentPresenter x:Name="MasterPresenter"
+                                                  x:DeferLoadStrategy="Lazy"
+                                                  Content="{TemplateBinding MasterContent}"
+                                                  ContentTemplate="{TemplateBinding MasterContentTemplate}"
+                                                  ContentTemplateSelector="{TemplateBinding MasterContentTemplateSelector}"
+                                                  HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                                  VerticalAlignment="{TemplateBinding VerticalContentAlignment}" />
+                            </Border>
                             <Border x:Name="DetailsContentContainer"
                                     HorizontalAlignment="Stretch"
                                     VerticalAlignment="Stretch"
