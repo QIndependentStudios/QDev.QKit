@@ -4,7 +4,7 @@
       xmlns:local="using:QKitBlankApp.Feature.Grouping"
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-      xmlns:q="using:QKit.Controls"
+      xmlns:q="using:QKit.Uwp.Controls"
       mc:Ignorable="d">
     <Page.DataContext>
         <local:GroupingViewModel x:Name="ViewModel" />

@@ -3,8 +3,8 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:primatives="using:Windows.UI.Xaml.Controls.Primitives"
                     xmlns:wuxdata="using:Windows.UI.Xaml.Data"
-                    xmlns:grouping="using:QKit.Grouping"
-                    xmlns:selectors="using:QKit.Selectors">
+                    xmlns:grouping="using:QKit.Uwp.Grouping"
+                    xmlns:selectors="using:QKit.Uwp.Selectors">
     <ResourceDictionary.ThemeDictionaries>
         <ResourceDictionary x:Key="Light">
             <primatives:JumpListItemForegroundConverter x:Key="JumpListItemForeground"

@@ -1,6 +1,6 @@
 <ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                    xmlns:qConverters="using:QKit.Converters">
+                    xmlns:qConverters="using:QKit.Uwp.Converters">
 
     <!--  custom styles here  -->
     <qConverters:MasterDetailsSelectionModeConverter x:Key="MasterDetailsSelectionModeConverter" />

@@ -1,4 +1,4 @@
-﻿using QKit.Grouping;
+﻿using QKit.Uwp.Grouping;
 using System;
 using System.Collections.Generic;
 using System.Linq;

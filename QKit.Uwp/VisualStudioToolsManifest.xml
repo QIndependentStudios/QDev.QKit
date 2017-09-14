@@ -1,0 +1,9 @@
+﻿<FileList>
+  <File Reference="QKit.Uwp.dll">
+    <ToolboxItems VSCategory="QKit" BlendCategory="QKit">
+      <Item Type="QKit.Uwp.Controls.CustomTitleBar" />
+      <Item Type="QKit.Uwp.Controls.MasterDetailsView" />
+      <Item Type="QKit.Uwp.Controls.NavigationMenuView" />
+    </ToolboxItems>
+  </File>
+</FileList>

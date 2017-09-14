@@ -1,0 +1,67 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:controls="using:QKit.Uwp.Controls">
+
+    <Style TargetType="controls:CustomTitleBar">
+        <Setter Property="HorizontalContentAlignment"
+                Value="Left" />
+        <Setter Property="VerticalContentAlignment"
+                Value="Center" />
+        <Setter Property="Height"
+                Value="32" />
+        <Setter Property="Padding"
+                Value="12,0,0,0" />
+        <Setter Property="FontSize"
+                Value="12" />
+        <Setter Property="InactiveBackgroundBrush"
+                Value="Transparent" />
+        <Setter Property="InactiveBorderBrush"
+                Value="Transparent" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="controls:CustomTitleBar">
+                    <Grid>
+                        <Grid.ChildrenTransitions>
+                            <TransitionCollection>
+                                <RepositionThemeTransition />
+                            </TransitionCollection>
+                        </Grid.ChildrenTransitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <Border x:Name="BackgroundBrushPresenter"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                Background="{TemplateBinding Background}"
+                                Grid.ColumnSpan="3" />
+                        <Border x:Name="InactiveBackgroundBrushPresenter"
+                                BorderBrush="{TemplateBinding InactiveBorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                Background="{TemplateBinding InactiveBackgroundBrush}"
+                                Grid.ColumnSpan="3" />
+                        <Rectangle Width="{TemplateBinding LeftInsetWidth}"
+                                   Visibility="{TemplateBinding LeftInsetVisibility}" />
+                        <Button x:Name="XamlBackButton"
+                                Width="{TemplateBinding LeftInsetWidth}"
+                                Visibility="{TemplateBinding XamlBackButtonVisibility}"
+                                VerticalAlignment="Stretch">
+                            <FontIcon Glyph=""
+                                      FontSize="13.5" />
+                        </Button>
+                        <ContentPresenter Content="{TemplateBinding Content}"
+                                          ContentTemplate="{TemplateBinding ContentTemplate}"
+                                          Margin="{TemplateBinding Padding}"
+                                          ContentTransitions="{TemplateBinding ContentTransitions}"
+                                          HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                          VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                          Grid.Column="1" />
+                        <Rectangle Width="{TemplateBinding RightInsetWidth}"
+                                   Grid.Column="2" />
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+</ResourceDictionary>

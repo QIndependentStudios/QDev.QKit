@@ -1,8 +1,0 @@
-﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
-    <ResourceDictionary.MergedDictionaries>
-        <ResourceDictionary Source="ms-appx:///QKit/Themes/MasterDetailsView.xaml" />
-        <ResourceDictionary Source="ms-appx:///QKit/Themes/NavigationMenuView.xaml" />
-        <ResourceDictionary Source="ms-appx:///QKit/Themes/CustomTitleBar.xaml" />
-    </ResourceDictionary.MergedDictionaries>
-</ResourceDictionary>
