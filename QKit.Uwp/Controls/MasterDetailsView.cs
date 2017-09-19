@@ -190,7 +190,8 @@ namespace QKit.Uwp.Controls
         public MasterDetailsView()
         {
             DefaultStyleKey = typeof(MasterDetailsView);
-            SizeChanged += MasterDetailsView_SizeChanged;
+            Loaded += MasterDetailsView_Loaded;
+            Unloaded += MasterDetailsView_Unloaded;
         }
         #endregion
 
@@ -254,6 +255,22 @@ namespace QKit.Uwp.Controls
         #endregion
 
         #region Event Handlers
+        private void MasterDetailsView_Loaded(object sender, RoutedEventArgs e)
+        {
+            SizeChanged += MasterDetailsView_SizeChanged;
+            UpdateVisualState();
+        }
+
+        private void MasterDetailsView_Unloaded(object sender, RoutedEventArgs e)
+        {
+            SizeChanged -= MasterDetailsView_SizeChanged;
+        }
+
+        private void MasterDetailsView_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            UpdateVisualState();
+        }
+
         private void CommonStates_CurrentStateChanged(object sender, VisualStateChangedEventArgs e)
         {
             var oldValue = MasterDetailsViewState.Full;
@@ -265,11 +282,6 @@ namespace QKit.Uwp.Controls
                 newValue = VisualStateNameEnumDictionary[e.NewState.Name];
 
             OnViewStateChanged(oldValue, newValue);
-        }
-
-        private void MasterDetailsView_SizeChanged(object sender, SizeChangedEventArgs e)
-        {
-            UpdateVisualState();
         }
         #endregion
     }
