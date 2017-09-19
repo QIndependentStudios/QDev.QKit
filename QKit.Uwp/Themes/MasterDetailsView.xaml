@@ -26,9 +26,10 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="controls:MasterDetailsView">
-                    <Border Background="{TemplateBinding Background}"
-                            BorderBrush="{TemplateBinding BorderBrush}"
-                            BorderThickness="{TemplateBinding BorderThickness}">
+                    <RelativePanel Background="{TemplateBinding Background}"
+                                   BorderBrush="{TemplateBinding BorderBrush}"
+                                   BorderThickness="{TemplateBinding BorderThickness}"
+                                   Margin="{TemplateBinding Padding}">
                         <VisualStateManager.VisualStateGroups>
                             <VisualStateGroup x:Name="CommonStates">
                                 <VisualStateGroup.Transitions>
@@ -36,9 +37,14 @@
                                                       To="DetailsVisualState">
                                         <Storyboard>
                                             <ObjectAnimationUsingKeyFrames Storyboard.TargetName="MasterContentContainer"
-                                                                           Storyboard.TargetProperty="(Grid.Column)">
+                                                                           Storyboard.TargetProperty="(RelativePanel.AlignRightWithPanel)">
                                                 <DiscreteObjectKeyFrame KeyTime="0"
-                                                                        Value="1" />
+                                                                        Value="True" />
+                                            </ObjectAnimationUsingKeyFrames>
+                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="DetailsContentContainer"
+                                                                           Storyboard.TargetProperty="(RelativePanel.AlignLeftWithPanel)">
+                                                <DiscreteObjectKeyFrame KeyTime="0"
+                                                                        Value="True" />
                                             </ObjectAnimationUsingKeyFrames>
                                             <ObjectAnimationUsingKeyFrames Storyboard.TargetName="MasterContentContainer"
                                                                            Storyboard.TargetProperty="IsHitTestVisible">
@@ -58,9 +64,14 @@
                                                       To="MasterVisualState">
                                         <Storyboard>
                                             <ObjectAnimationUsingKeyFrames Storyboard.TargetName="MasterContentContainer"
-                                                                           Storyboard.TargetProperty="(Grid.Column)">
+                                                                           Storyboard.TargetProperty="(RelativePanel.AlignRightWithPanel)">
                                                 <DiscreteObjectKeyFrame KeyTime="0"
-                                                                        Value="0" />
+                                                                        Value="True" />
+                                            </ObjectAnimationUsingKeyFrames>
+                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="DetailsContentContainer"
+                                                                           Storyboard.TargetProperty="(RelativePanel.AlignLeftWithPanel)">
+                                                <DiscreteObjectKeyFrame KeyTime="0"
+                                                                        Value="True" />
                                             </ObjectAnimationUsingKeyFrames>
                                             <ObjectAnimationUsingKeyFrames Storyboard.TargetName="DetailsContentContainer"
                                                                            Storyboard.TargetProperty="IsHitTestVisible">
@@ -81,9 +92,14 @@
                                 <VisualState x:Name="MasterVisualState">
                                     <Storyboard>
                                         <ObjectAnimationUsingKeyFrames Storyboard.TargetName="MasterContentContainer"
-                                                                       Storyboard.TargetProperty="(Grid.Column)">
+                                                                       Storyboard.TargetProperty="(RelativePanel.AlignRightWithPanel)">
                                             <DiscreteObjectKeyFrame KeyTime="0"
-                                                                    Value="1" />
+                                                                    Value="True" />
+                                        </ObjectAnimationUsingKeyFrames>
+                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="DetailsContentContainer"
+                                                                       Storyboard.TargetProperty="(RelativePanel.AlignLeftWithPanel)">
+                                            <DiscreteObjectKeyFrame KeyTime="0"
+                                                                    Value="True" />
                                         </ObjectAnimationUsingKeyFrames>
                                         <ObjectAnimationUsingKeyFrames Storyboard.TargetName="DetailsContentContainer"
                                                                        Storyboard.TargetProperty="Visibility">
@@ -100,9 +116,14 @@
                                 <VisualState x:Name="DetailsVisualState">
                                     <Storyboard>
                                         <ObjectAnimationUsingKeyFrames Storyboard.TargetName="MasterContentContainer"
-                                                                       Storyboard.TargetProperty="(Grid.Column)">
+                                                                       Storyboard.TargetProperty="(RelativePanel.AlignRightWithPanel)">
                                             <DiscreteObjectKeyFrame KeyTime="0"
-                                                                    Value="1" />
+                                                                    Value="True" />
+                                        </ObjectAnimationUsingKeyFrames>
+                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="DetailsContentContainer"
+                                                                       Storyboard.TargetProperty="(RelativePanel.AlignLeftWithPanel)">
+                                            <DiscreteObjectKeyFrame KeyTime="0"
+                                                                    Value="True" />
                                         </ObjectAnimationUsingKeyFrames>
                                         <ObjectAnimationUsingKeyFrames Storyboard.TargetName="MasterContentContainer"
                                                                        Storyboard.TargetProperty="Visibility">
@@ -118,34 +139,33 @@
                                 </VisualState>
                             </VisualStateGroup>
                         </VisualStateManager.VisualStateGroups>
-
-                        <Grid Margin="{TemplateBinding Padding}">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="Auto" />
-                                <ColumnDefinition Width="*" />
-                            </Grid.ColumnDefinitions>
-                            <Border x:Name="MasterContentContainer"
-                                    Width="{Binding MasterPaneWidth, RelativeSource={RelativeSource TemplatedParent}}">
-                                <ContentPresenter x:Name="MasterPresenter"
-                                                  x:DeferLoadStrategy="Lazy"
-                                                  Content="{TemplateBinding MasterContent}"
-                                                  ContentTemplate="{TemplateBinding MasterContentTemplate}"
-                                                  ContentTemplateSelector="{TemplateBinding MasterContentTemplateSelector}"
-                                                  HorizontalAlignment="Stretch"
-                                                  VerticalAlignment="Stretch" />
-                            </Border>
-                            <Border x:Name="DetailsContentContainer"
-                                    Grid.Column="1">
-                                <ContentPresenter x:Name="DetailsPresenter"
-                                                  x:DeferLoadStrategy="Lazy"
-                                                  Content="{TemplateBinding DetailsContent}"
-                                                  ContentTemplate="{TemplateBinding MasterContentTemplate}"
-                                                  ContentTemplateSelector="{TemplateBinding DetailsContentTemplateSelector}"
-                                                  HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
-                                                  VerticalAlignment="{TemplateBinding VerticalContentAlignment}" />
-                            </Border>
-                        </Grid>
-                    </Border>
+                        <Border x:Name="MasterContentContainer"
+                                Width="{Binding MasterPaneWidth, RelativeSource={RelativeSource TemplatedParent}}"
+                                RelativePanel.AlignLeftWithPanel="True"
+                                RelativePanel.AlignTopWithPanel="True"
+                                RelativePanel.AlignBottomWithPanel="True">
+                            <ContentPresenter x:Name="MasterPresenter"
+                                              x:DeferLoadStrategy="Lazy"
+                                              Content="{TemplateBinding MasterContent}"
+                                              ContentTemplate="{TemplateBinding MasterContentTemplate}"
+                                              ContentTemplateSelector="{TemplateBinding MasterContentTemplateSelector}"
+                                              HorizontalAlignment="Stretch"
+                                              VerticalAlignment="Stretch" />
+                        </Border>
+                        <Border x:Name="DetailsContentContainer"
+                                RelativePanel.RightOf="MasterContentContainer"
+                                RelativePanel.AlignTopWithPanel="True"
+                                RelativePanel.AlignRightWithPanel="True"
+                                RelativePanel.AlignBottomWithPanel="True">
+                            <ContentPresenter x:Name="DetailsPresenter"
+                                              x:DeferLoadStrategy="Lazy"
+                                              Content="{TemplateBinding DetailsContent}"
+                                              ContentTemplate="{TemplateBinding MasterContentTemplate}"
+                                              ContentTemplateSelector="{TemplateBinding DetailsContentTemplateSelector}"
+                                              HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                              VerticalAlignment="{TemplateBinding VerticalContentAlignment}" />
+                        </Border>
+                    </RelativePanel>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
