@@ -1,8 +1,12 @@
-﻿using System;
+﻿using QKit.Uwp.Utils;
+using System;
 using System.Collections.Generic;
+using Windows.ApplicationModel;
+using Windows.UI.Core;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Markup;
+using Windows.UI.Xaml.Navigation;
 
 namespace QKit.Uwp.Controls
 {
@@ -112,10 +116,17 @@ namespace QKit.Uwp.Controls
             typeof(bool),
             typeof(MasterDetailsView),
             new PropertyMetadata(true));
+
+        public static readonly DependencyProperty HandleBackNavigationProperty = DependencyProperty.Register(
+            nameof(HandleBackNavigation),
+            typeof(bool),
+            typeof(MasterDetailsView),
+            new PropertyMetadata(true));
         #endregion
 
-        #region Template Parts
-        private VisualStateGroup CommonStates { get; set; }
+        #region Fields
+        private VisualStateGroup _commonStates;
+        private Frame _frame;
         #endregion
 
         #region Properties
@@ -184,6 +195,12 @@ namespace QKit.Uwp.Controls
             get { return (bool)GetValue(UseTransitionsProperty); }
             set { SetValue(UseTransitionsProperty, value); }
         }
+
+        public bool HandleBackNavigation
+        {
+            get { return (bool)GetValue(HandleBackNavigationProperty); }
+            set { SetValue(HandleBackNavigationProperty, value); }
+        }
         #endregion
 
         #region Constructors
@@ -244,13 +261,13 @@ namespace QKit.Uwp.Controls
 
         protected override void OnApplyTemplate()
         {
-            if (CommonStates != null)
-                CommonStates.CurrentStateChanged -= CommonStates_CurrentStateChanged;
+            if (_commonStates != null)
+                _commonStates.CurrentStateChanged -= CommonStates_CurrentStateChanged;
 
-            CommonStates = GetTemplateChild(CommonStatesName) as VisualStateGroup;
+            _commonStates = GetTemplateChild(CommonStatesName) as VisualStateGroup;
 
-            if (CommonStates != null)
-                CommonStates.CurrentStateChanged += CommonStates_CurrentStateChanged;
+            if (_commonStates != null)
+                _commonStates.CurrentStateChanged += CommonStates_CurrentStateChanged;
         }
         #endregion
 
@@ -258,12 +275,27 @@ namespace QKit.Uwp.Controls
         private void MasterDetailsView_Loaded(object sender, RoutedEventArgs e)
         {
             SizeChanged += MasterDetailsView_SizeChanged;
+
+            if (DesignMode.DesignModeEnabled == false)
+            {
+                SystemNavigationManager.GetForCurrentView().BackRequested += SystemNavigationManager_BackRequested;
+
+                _frame = this.FindParent<Frame>();
+
+                if (_frame != null)
+                    _frame.Navigating += Frame_Navigating;
+            }
+
             UpdateVisualState();
         }
 
         private void MasterDetailsView_Unloaded(object sender, RoutedEventArgs e)
         {
             SizeChanged -= MasterDetailsView_SizeChanged;
+            SystemNavigationManager.GetForCurrentView().BackRequested -= SystemNavigationManager_BackRequested;
+
+            if (_frame != null)
+                _frame.Navigating -= Frame_Navigating;
         }
 
         private void MasterDetailsView_SizeChanged(object sender, SizeChangedEventArgs e)
@@ -282,6 +314,26 @@ namespace QKit.Uwp.Controls
                 newValue = VisualStateNameEnumDictionary[e.NewState.Name];
 
             OnViewStateChanged(oldValue, newValue);
+        }
+
+        private void SystemNavigationManager_BackRequested(object sender, BackRequestedEventArgs e)
+        {
+            if (!HandleBackNavigation || ViewState != MasterDetailsViewState.Details)
+                return;
+
+            ShowDetailsInStackedMode = false;
+            e.Handled = true;
+        }
+
+        private void Frame_Navigating(object sender, NavigatingCancelEventArgs e)
+        {
+            if (!HandleBackNavigation
+                || e.NavigationMode != NavigationMode.Back
+                || ViewState != MasterDetailsViewState.Details)
+                return;
+
+            ShowDetailsInStackedMode = false;
+            e.Cancel = true;
         }
         #endregion
     }

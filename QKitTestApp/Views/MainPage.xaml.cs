@@ -11,13 +11,6 @@ namespace QKitTestApp.Views
         {
             InitializeComponent();
             NavigationCacheMode = Windows.UI.Xaml.Navigation.NavigationCacheMode.Enabled;
-            App.BackRequested += App_BackRequested;
-        }
-
-        private void App_BackRequested(object sender, Template10.Common.HandledEventArgs e)
-        {
-            //if (MasterDetails.IsStackedMode && MasterDetails.ShowDetailsInStackedMode)
-            //    ConnectedAnimationService.GetForCurrentView().PrepareToAnimate("back", Circle);
         }
 
         private object _clickedItem;

@@ -14,8 +14,7 @@
                              SelectedMenuItemChanged="NavigationMenuRoot_SelectedMenuItemChanged">
         <qkit:NavigationMenuView.PrimaryMenuItems>
             <qkit:NavigationMenuItem Content="Home"
-                                     PageType="views:MainPage"
-                                     ClearHistory="True">
+                                     PageType="views:MainPage">
                 <qkit:NavigationMenuItem.Icon>
                     <FontIcon Glyph="&#xE80F;"/>
                 </qkit:NavigationMenuItem.Icon>

@@ -55,15 +55,12 @@
         <qkit:MasterDetailsView x:Name="MasterDetails"
                                 Grid.Row="1"
                                 ViewStateChanging="MasterDetails_ViewStateChanging">
-            <interactivity:Interaction.Behaviors>
-                <behaviors:BackButtonBehavior Handled="{x:Bind MasterDetails.ViewState, Mode=OneWay, Converter={StaticResource MasterDetailsCanExitDetailsConverter}}">
-                    <core:ChangePropertyAction TargetObject="{x:Bind MasterDetails}"
-                                               PropertyName="ShowDetailsInStackedMode"
-                                               Value="False" />
-                </behaviors:BackButtonBehavior>
-            </interactivity:Interaction.Behaviors>
             <qkit:MasterDetailsView.MasterContent>
-                <StackPanel>
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition />
+                    </Grid.RowDefinitions>
                     <controls:PageHeader x:Name="pageHeader"
                                          RelativePanel.AlignLeftWithPanel="True"
                                          RelativePanel.AlignRightWithPanel="True"
@@ -79,11 +76,14 @@
                         </controls:PageHeader.Content>
                         <AppBarToggleButton Content="Transitions"
                                             IsChecked="{Binding UseTransitions, ElementName=MasterDetails, Mode=TwoWay}" />
+                        <AppBarToggleButton Content="HandleBack"
+                                            IsChecked="{Binding HandleBackNavigation, ElementName=MasterDetails, Mode=TwoWay}" />
                     </controls:PageHeader>
                     <ListView x:Name="MasterList"
                               IsItemClickEnabled="{x:Bind MasterDetails.ViewState, Mode=OneWay, Converter={StaticResource MasterDetailsIsStackedModeConverter}}"
                               SelectionMode="{x:Bind MasterDetails.ViewState, Mode=OneWay, Converter={StaticResource MasterDetailsSelectionModeConverter}}"
-                              ItemClick="MasterList_ItemClick">
+                              ItemClick="MasterList_ItemClick"
+                              Grid.Row="1">
                         <interactivity:Interaction.Behaviors>
                             <core:EventTriggerBehavior EventName="ItemClick">
                                 <core:ChangePropertyAction TargetObject="{x:Bind MasterDetails}"
@@ -108,8 +108,13 @@
                         <x:String>3</x:String>
                         <x:String>4</x:String>
                         <x:String>5</x:String>
+                        <x:String>6</x:String>
+                        <x:String>7</x:String>
+                        <x:String>8</x:String>
+                        <x:String>9</x:String>
+                        <x:String>10</x:String>
                     </ListView>
-                </StackPanel>
+                </Grid>
             </qkit:MasterDetailsView.MasterContent>
             <qkit:MasterDetailsView.DetailsContent>
                 <StackPanel>
