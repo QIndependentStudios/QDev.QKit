@@ -35,25 +35,20 @@
                                     <VisualTransition From="MasterVisualState"
                                                       To="DetailsVisualState">
                                         <Storyboard>
-                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="MasterPane"
-                                                                           Storyboard.TargetProperty="Width">
+                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="MasterContentContainer"
+                                                                           Storyboard.TargetProperty="(Grid.Column)">
                                                 <DiscreteObjectKeyFrame KeyTime="0"
-                                                                        Value="*" />
-                                            </ObjectAnimationUsingKeyFrames>
-                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="DetailsPane"
-                                                                           Storyboard.TargetProperty="Width">
-                                                <DiscreteObjectKeyFrame KeyTime="0"
-                                                                        Value="0" />
+                                                                        Value="1" />
                                             </ObjectAnimationUsingKeyFrames>
                                             <ObjectAnimationUsingKeyFrames Storyboard.TargetName="MasterContentContainer"
                                                                            Storyboard.TargetProperty="IsHitTestVisible">
                                                 <DiscreteObjectKeyFrame KeyTime="0"
                                                                         Value="False" />
                                             </ObjectAnimationUsingKeyFrames>
-                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="DetailsContentContainer"
-                                                                           Storyboard.TargetProperty="(Grid.Column)">
+                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="MasterContentContainer"
+                                                                           Storyboard.TargetProperty="Width">
                                                 <DiscreteObjectKeyFrame KeyTime="0"
-                                                                        Value="0" />
+                                                                        Value="NaN" />
                                             </ObjectAnimationUsingKeyFrames>
                                             <DrillInThemeAnimation EntranceTargetName="DetailsContentContainer"
                                                                    ExitTargetName="MasterContentContainer" />
@@ -62,13 +57,8 @@
                                     <VisualTransition From="DetailsVisualState"
                                                       To="MasterVisualState">
                                         <Storyboard>
-                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="MasterPane"
-                                                                           Storyboard.TargetProperty="Width">
-                                                <DiscreteObjectKeyFrame KeyTime="0"
-                                                                        Value="*" />
-                                            </ObjectAnimationUsingKeyFrames>
-                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="DetailsPane"
-                                                                           Storyboard.TargetProperty="Width">
+                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="MasterContentContainer"
+                                                                           Storyboard.TargetProperty="(Grid.Column)">
                                                 <DiscreteObjectKeyFrame KeyTime="0"
                                                                         Value="0" />
                                             </ObjectAnimationUsingKeyFrames>
@@ -77,70 +67,52 @@
                                                 <DiscreteObjectKeyFrame KeyTime="0"
                                                                         Value="False" />
                                             </ObjectAnimationUsingKeyFrames>
-                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="DetailsContentContainer"
-                                                                           Storyboard.TargetProperty="(Grid.Column)">
+                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="MasterContentContainer"
+                                                                           Storyboard.TargetProperty="Width">
                                                 <DiscreteObjectKeyFrame KeyTime="0"
-                                                                        Value="0" />
+                                                                        Value="NaN" />
                                             </ObjectAnimationUsingKeyFrames>
                                             <DrillOutThemeAnimation EntranceTargetName="MasterContentContainer"
                                                                     ExitTargetName="DetailsContentContainer" />
                                         </Storyboard>
                                     </VisualTransition>
                                 </VisualStateGroup.Transitions>
-                                <VisualState x:Name="FullVisualState">
-                                    <Storyboard>
-                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="MasterPane"
-                                                                       Storyboard.TargetProperty="Width">
-                                            <DiscreteObjectKeyFrame KeyTime="0"
-                                                                    Value="{Binding MasterPaneWidth, RelativeSource={RelativeSource TemplatedParent}}" />
-                                        </ObjectAnimationUsingKeyFrames>
-                                    </Storyboard>
-                                </VisualState>
+                                <VisualState x:Name="FullVisualState" />
                                 <VisualState x:Name="MasterVisualState">
                                     <Storyboard>
-                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="MasterPane"
-                                                                       Storyboard.TargetProperty="Width">
-                                            <DiscreteObjectKeyFrame KeyTime="0"
-                                                                    Value="*" />
-                                        </ObjectAnimationUsingKeyFrames>
-                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="DetailsPane"
-                                                                       Storyboard.TargetProperty="Width">
-                                            <DiscreteObjectKeyFrame KeyTime="0"
-                                                                    Value="0" />
-                                        </ObjectAnimationUsingKeyFrames>
-                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="DetailsContentContainer"
+                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="MasterContentContainer"
                                                                        Storyboard.TargetProperty="(Grid.Column)">
                                             <DiscreteObjectKeyFrame KeyTime="0"
-                                                                    Value="0" />
+                                                                    Value="1" />
                                         </ObjectAnimationUsingKeyFrames>
                                         <ObjectAnimationUsingKeyFrames Storyboard.TargetName="DetailsContentContainer"
                                                                        Storyboard.TargetProperty="Visibility">
                                             <DiscreteObjectKeyFrame KeyTime="0"
                                                                     Value="Collapsed" />
                                         </ObjectAnimationUsingKeyFrames>
+                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="MasterContentContainer"
+                                                                       Storyboard.TargetProperty="Width">
+                                            <DiscreteObjectKeyFrame KeyTime="0"
+                                                                    Value="NaN" />
+                                        </ObjectAnimationUsingKeyFrames>
                                     </Storyboard>
                                 </VisualState>
                                 <VisualState x:Name="DetailsVisualState">
                                     <Storyboard>
-                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="MasterPane"
-                                                                       Storyboard.TargetProperty="Width">
+                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="MasterContentContainer"
+                                                                       Storyboard.TargetProperty="(Grid.Column)">
                                             <DiscreteObjectKeyFrame KeyTime="0"
-                                                                    Value="*" />
-                                        </ObjectAnimationUsingKeyFrames>
-                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="DetailsPane"
-                                                                       Storyboard.TargetProperty="Width">
-                                            <DiscreteObjectKeyFrame KeyTime="0"
-                                                                    Value="0" />
+                                                                    Value="1" />
                                         </ObjectAnimationUsingKeyFrames>
                                         <ObjectAnimationUsingKeyFrames Storyboard.TargetName="MasterContentContainer"
                                                                        Storyboard.TargetProperty="Visibility">
                                             <DiscreteObjectKeyFrame KeyTime="0"
                                                                     Value="Collapsed" />
                                         </ObjectAnimationUsingKeyFrames>
-                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="DetailsContentContainer"
-                                                                       Storyboard.TargetProperty="(Grid.Column)">
+                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="MasterContentContainer"
+                                                                       Storyboard.TargetProperty="Width">
                                             <DiscreteObjectKeyFrame KeyTime="0"
-                                                                    Value="0" />
+                                                                    Value="NaN" />
                                         </ObjectAnimationUsingKeyFrames>
                                     </Storyboard>
                                 </VisualState>
@@ -149,33 +121,28 @@
 
                         <Grid Margin="{TemplateBinding Padding}">
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition x:Name="MasterPane"
-                                                  Width="{Binding MasterPaneWidth, RelativeSource={RelativeSource TemplatedParent}}" />
-                                <ColumnDefinition x:Name="DetailsPane"
-                                                  Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="*" />
                             </Grid.ColumnDefinitions>
-                            <Border x:Name="MasterContentContainer">
+                            <Border x:Name="MasterContentContainer"
+                                    Width="{Binding MasterPaneWidth, RelativeSource={RelativeSource TemplatedParent}}">
                                 <ContentPresenter x:Name="MasterPresenter"
                                                   x:DeferLoadStrategy="Lazy"
                                                   Content="{TemplateBinding MasterContent}"
                                                   ContentTemplate="{TemplateBinding MasterContentTemplate}"
                                                   ContentTemplateSelector="{TemplateBinding MasterContentTemplateSelector}"
-                                                  HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
-                                                  VerticalAlignment="{TemplateBinding VerticalContentAlignment}" />
+                                                  HorizontalAlignment="Stretch"
+                                                  VerticalAlignment="Stretch" />
                             </Border>
                             <Border x:Name="DetailsContentContainer"
-                                    HorizontalAlignment="Stretch"
-                                    VerticalAlignment="Stretch"
                                     Grid.Column="1">
                                 <ContentPresenter x:Name="DetailsPresenter"
                                                   x:DeferLoadStrategy="Lazy"
                                                   Content="{TemplateBinding DetailsContent}"
                                                   ContentTemplate="{TemplateBinding MasterContentTemplate}"
                                                   ContentTemplateSelector="{TemplateBinding DetailsContentTemplateSelector}"
-                                                  HorizontalAlignment="Stretch"
-                                                  VerticalAlignment="Stretch"
-                                                  HorizontalContentAlignment="Stretch"
-                                                  VerticalContentAlignment="Stretch" />
+                                                  HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                                  VerticalAlignment="{TemplateBinding VerticalContentAlignment}" />
                             </Border>
                         </Grid>
                     </Border>
