@@ -8,11 +8,11 @@
       xmlns:local="using:QKitTestApp.Views"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
       xmlns:vm="using:QKitTestApp.ViewModels"
-      xmlns:qkit="using:QKit.Uwp.Controls"
+      xmlns:qkit="using:QDev.QKit.Controls"
       xmlns:interactivity="using:Microsoft.Xaml.Interactivity"
       xmlns:core="using:Microsoft.Xaml.Interactions.Core"
       xmlns:behaviors="using:Template10.Behaviors"
-      xmlns:ext="using:QKit.Uwp.Extensions"
+      xmlns:ext="using:QDev.QKit.Extensions"
       mc:Ignorable="d">
     <Page.Resources>
     </Page.Resources>

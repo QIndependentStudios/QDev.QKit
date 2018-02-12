@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<package>
+  <metadata>
+    <id>QDev.QKit</id>
+    <version>0.9.0</version>
+    <authors>Q</authors>
+    <owners>Q</owners>
+    <!--<iconUrl>http://ICON_URL_HERE_OR_DELETE_THIS_LINE</iconUrl>-->
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>A UWP class library containing useful controls and utilities for app development.</description>
+    <releaseNotes>Bug fixes.</releaseNotes>
+    <copyright></copyright>
+    <tags>UWP UWA XAML Windows10</tags>
+    <dependencies>
+      <group targetFramework="uap10.0">
+        <dependency id="Microsoft.NETCore.UniversalWindowsPlatform" version="5.4.0" />
+      </group>
+    </dependencies>
+  </metadata>
+  <files>
+    <file src="bin\Release\QDev.QKit.dll" target="lib\uap10.0" />
+    <file src="bin\Release\QDev.QKit.pdb" target="lib\uap10.0" />
+    <file src="bin\Release\QDev.QKit.pri" target="lib\uap10.0" />
+    <file src="VisualStudioToolsManifest.xml" target="tools" />
+    <file src="bin\Release\QDev.QKit.xr.xml" target="lib\uap10.0\QDev.QKit" />
+    <file src="Themes\Generic.xaml" target="lib\uap10.0\QDev.QKit\Themes\Generic.xaml" />
+    <file src="Themes\CustomTitleBar.xaml" target="lib\uap10.0\QDev.QKit\Themes\CustomTitleBar.xaml" />
+    <file src="Themes\MasterDetailsView.xaml" target="lib\uap10.0\QDev.QKit\Themes\MasterDetailsView.xaml" />
+    <file src="Themes\NavigationMenuView.xaml" target="lib\uap10.0\QDev.QKit\Themes\NavigationMenuView.xaml" />
+  </files>
+</package>

@@ -153,12 +153,6 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\QKit.Uwp\QKit.Uwp.csproj">
-      <Project>{969363bf-0ffa-401a-90a9-07013441ea30}</Project>
-      <Name>QKit</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <PackageReference Include="Microsoft.NETCore.UniversalWindowsPlatform">
       <Version>5.4.0</Version>
     </PackageReference>
@@ -171,6 +165,12 @@
     <PackageReference Include="Template10">
       <Version>1.1.12</Version>
     </PackageReference>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\QDev.QKit\QDev.QKit.csproj">
+      <Project>{969363bf-0ffa-401a-90a9-07013441ea30}</Project>
+      <Name>QDev.QKit</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>

@@ -1,0 +1,10 @@
+﻿<FileList>
+  <File Reference="QDev.QKit.dll">
+    <ToolboxItems VSCategory="QKit" BlendCategory="QKit">
+      <Item Type="QDev.QKit.Controls.CustomTitleBar" />
+      <Item Type="QDev.QKit.Controls.MasterDetailsView" />
+      <Item Type="QDev.QKit.Controls.NavigationMenuView" />
+      <Item Type="QDev.QKit.Controls.UniformWrapGrid" />
+    </ToolboxItems>
+  </File>
+</FileList>

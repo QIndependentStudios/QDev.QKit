@@ -1,4 +1,4 @@
-using QKit.Uwp.Controls;
+using QDev.QKit.Controls;
 using System;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Media.Animation;
